@@ -1,4 +1,6 @@
 packages:
   - apps/*
+  - packages/*
+  - mfe/*
 minimumReleaseAgeExclude:
   - lucide-react@1.78.0

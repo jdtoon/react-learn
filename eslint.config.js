@@ -9,15 +9,17 @@ export default defineConfig([
   js.configs.recommended,
   tseslint.configs.strict,
   {
-    files: ['apps/**/*.{ts,tsx}'],
+    files: ['apps/**/*.{ts,tsx}', 'packages/**/*.{ts,tsx}', 'mfe/**/*.{ts,tsx}'],
     extends: [reactHooks.configs.flat.recommended],
     languageOptions: { globals: globals.browser },
   },
   {
     files: [
-      'scripts/**/*.mjs',
+      'scripts/**/*.{mjs,ts}',
       'eslint.config.js',
       'apps/*/*.config.ts',
+      'packages/*/*.config.ts',
+      'mfe/*/*.config.ts',
       'apps/*/e2e/**/*.ts',
       'apps/*/scripts/**/*.ts',
     ],

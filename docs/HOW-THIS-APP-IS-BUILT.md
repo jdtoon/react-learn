@@ -29,12 +29,17 @@ The course is a single-page React app that is also its own worked example. This 
 │       │   └── styles/        tokens and global styles
 │       ├── e2e/               Playwright specs
 │       └── scripts/           the docs generator
+├── mfe/
+│   └── react-catalog/         a remote built on its own with Module Federation
+├── packages/
+│   ├── mfe-contracts/         typed events and the manifest shape shared by host and remotes
+│   └── design-tokens/         the colour, type and theme variables every remote reads
 ├── docs/                      hand-written and generated guides
-├── scripts/                   site assembly and the preview server
+├── scripts/                   dev orchestrator, remote registry, site assembly and the preview server
 └── .github/workflows/ci.yml   CI and the Pages deploy
 ```
 
-`pnpm-workspace.yaml` lists `apps/*`. The micro-frontend lab adds `mfe/*` for the remotes and `packages/*` for the code they share, covered at the end.
+`pnpm-workspace.yaml` lists `apps/*`, `packages/*` for the code the host and the remotes share, and `mfe/*` for the remotes. The micro-frontend lab is covered at the end.
 
 Every build and the dev server use the base path `/react-learn/`. The Vite config sets it once, and the router takes its `basename` from `import.meta.env.BASE_URL`, so no route or link hard-codes the prefix.
 
@@ -112,6 +117,7 @@ The kit gallery at `/kit` renders each component with its props. Animation is sw
 
 - a copy of the app build
 - `404.html`, a copy of `index.html`. GitHub Pages serves it for any path that has no file, so a deep link such as `/react-learn/modules/02-rendering` loads the app and the router takes over
+- each remote's build output under `remotes/<name>/`, and `remotes/manifest.json`, which lists every remote with its URL and size in bytes
 - an empty `.nojekyll`, so Pages serves files whose names start with an underscore untouched
 
 The folder mirrors the live site, so the layout that is tested is the layout that ships. `pnpm preview` serves `dist-site` on port 4173 with the same fallback behaviour, and the Playwright suite runs against it.

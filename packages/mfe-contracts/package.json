@@ -1,0 +1,17 @@
+{
+  "name": "@react-field-guide/mfe-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "jsdom": "31.0.1",
+    "vitest": "5.1.1"
+  }
+}

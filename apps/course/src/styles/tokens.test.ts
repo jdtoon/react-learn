@@ -3,7 +3,17 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { tracks } from '../content/curriculum';
 
-const css = readFileSync(path.join(import.meta.dirname, 'tokens.css'), 'utf8');
+const tokensDir = path.join(
+  import.meta.dirname,
+  '..',
+  '..',
+  '..',
+  '..',
+  'packages',
+  'design-tokens',
+);
+const css = readFileSync(path.join(tokensDir, 'tokens.css'), 'utf8');
+const courseCss = readFileSync(path.join(import.meta.dirname, 'tokens.css'), 'utf8');
 
 type Scope = Map<string, string>;
 
@@ -99,5 +109,42 @@ describe('dark theme track text tokens', () => {
 
   it.each(trackVars)('%s-text equals the track colour', (colorVar) => {
     expect(resolve(`${colorVar}-text`, scope)).toBe(resolve(colorVar, scope));
+  });
+});
+
+const frameworkVars = ['--react', '--vue', '--svelte', '--angular', '--plain'];
+const frameworkThemes: [string, string][] = [['dark theme', ':root'], ...lightThemes];
+
+describe.each(frameworkThemes)('%s framework colours', (_label, selector) => {
+  const scope = scopeFor(selector);
+
+  it.each(frameworkVars)('%s is defined as a hex colour', (name) => {
+    expect(resolve(name, scope)).toMatch(/^#[0-9a-f]{6}$/i);
+  });
+
+  it.each(frameworkVars)('x-ray tag text reads at 4.5:1 or better on %s', (name) => {
+    expect(contrast(resolve('--accent-fg', scope), resolve(name, scope))).toBeGreaterThanOrEqual(
+      4.5,
+    );
+  });
+
+  it.each(frameworkVars)('%s outlines a slot at 3:1 or better on the slot surface', (name) => {
+    expect(contrast(resolve(name, scope), resolve('--surface-2', scope))).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe('the shared token package', () => {
+  it('is imported by the course tokens', () => {
+    expect(courseCss).toContain("@import '@react-field-guide/design-tokens/tokens.css';");
+  });
+
+  it('defines the font stacks the course theme registers with Tailwind', () => {
+    const theme = /@theme static \{([^}]*)\}/.exec(courseCss)?.[1] ?? '';
+    const scope = scopeFor(':root');
+    for (const name of ['--font-display', '--font-body', '--font-mono']) {
+      const declared = new RegExp(`${name}:\\s*([^;]+);`).exec(theme)?.[1]?.trim();
+      expect(declared, name).toBeDefined();
+      expect(scope.get(name), name).toBe(declared);
+    }
   });
 });

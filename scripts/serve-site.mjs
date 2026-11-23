@@ -6,6 +6,7 @@ import { sendFile } from './send-file.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist-site');
 const base = '/react-learn/';
+const remotesBase = `${base}remotes/`;
 const fallback = path.join(root, 'react-learn', '404.html');
 const port = 4173;
 
@@ -58,7 +59,17 @@ createServer(async (req, res) => {
     res.end('Not found');
     return;
   }
-  send(res, (await resolveFile(pathname)) ?? fallback);
+  const file = await resolveFile(pathname);
+  if (file) {
+    send(res, file);
+    return;
+  }
+  if (pathname.startsWith(remotesBase)) {
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Not found');
+    return;
+  }
+  send(res, fallback);
 }).listen(port, () => {
   console.log(`Serving dist-site at http://localhost:${port}${base}`);
 });

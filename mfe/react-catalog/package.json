@@ -1,0 +1,49 @@
+{
+  "name": "@react-field-guide/react-catalog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-field-guide/mfe-contracts": "workspace:*",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@module-federation/vite": "1.24.1",
+    "@react-field-guide/design-tokens": "workspace:*",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "8.0.0",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.13",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "jsdom": "31.0.1",
+    "vite": "8.3.8",
+    "vitest": "5.1.1"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "react-catalog",
+        "slot": "catalog",
+        "team": "Discovery",
+        "framework": "react",
+        "kind": "federation",
+        "container": "react_catalog",
+        "expose": "./Catalog",
+        "entry": "remoteEntry.js",
+        "path": "react-catalog",
+        "devPort": 5201,
+        "live": true
+      }
+    ]
+  }
+}

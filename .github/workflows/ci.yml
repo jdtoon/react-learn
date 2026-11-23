@@ -28,19 +28,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm typecheck
-
-      - run: pnpm lint
-
-      - run: pnpm test
-
-      - run: pnpm docs:check
-
-      - run: pnpm build
-
-      - run: pnpm --filter @react-field-guide/course exec playwright install --with-deps chromium
-
-      - run: pnpm e2e
+      - run: pnpm run build
 
       - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v5

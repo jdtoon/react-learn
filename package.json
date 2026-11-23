@@ -7,13 +7,14 @@
     "node": ">=24.2"
   },
   "scripts": {
-    "dev": "pnpm --filter @react-field-guide/course dev",
+    "dev": "node scripts/dev.mjs",
+    "dev:course": "pnpm --filter @react-field-guide/course dev",
     "build": "pnpm -r build && node scripts/assemble-site.mjs",
     "preview": "node scripts/serve-site.mjs",
     "typecheck": "pnpm -r typecheck",
-    "lint": "eslint apps scripts eslint.config.js",
-    "format": "prettier --write apps scripts \"*.{js,json}\" pnpm-workspace.yaml",
-    "format:check": "prettier --check apps scripts \"*.{js,json}\" pnpm-workspace.yaml",
+    "lint": "eslint apps packages mfe scripts eslint.config.js",
+    "format": "prettier --write apps packages mfe scripts \"*.{js,json}\" pnpm-workspace.yaml",
+    "format:check": "prettier --check apps packages mfe scripts \"*.{js,json}\" pnpm-workspace.yaml",
     "test": "pnpm -r test",
     "e2e": "pnpm --filter @react-field-guide/course e2e",
     "docs:gen": "node apps/course/scripts/gen-docs.ts",

@@ -14,7 +14,7 @@ pnpm i
 pnpm dev
 ```
 
-The dev server runs at http://localhost:5173/react-learn/. The `/react-learn/` base path is used in dev, in the build and in the preview, so a link that works locally works on the live site.
+The course runs at http://localhost:5173/react-learn/ and each remote has its own dev server on a port from 5201 up. If you only work on the course, `pnpm dev:course` starts just that. The `/react-learn/` base path is used in dev, in the build and in the preview, so a link that works locally works on the live site.
 
 To see exactly what gets deployed, build the static site and serve it:
 
@@ -44,7 +44,8 @@ Run all of these from the repository root.
 
 | Command             | What it does                                                                      |
 | ------------------- | --------------------------------------------------------------------------------- |
-| `pnpm dev`          | Starts the course with hot reload                                                 |
+| `pnpm dev`          | Starts the course and every remote, each with hot reload                          |
+| `pnpm dev:course`   | Starts only the course                                                            |
 | `pnpm build`        | Builds the app and assembles `dist-site/react-learn`, the folder that is deployed |
 | `pnpm preview`      | Serves `dist-site` on port 4173 with the Pages fallback                           |
 | `pnpm typecheck`    | Runs the TypeScript compiler in strict mode                                       |

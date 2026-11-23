@@ -13,6 +13,7 @@ const NotFoundPage = lazyPage(() => import('../pages/NotFoundPage'), 'NotFoundPa
 const MeetingPage = lazyPage(() => import('../pages/MeetingPage'), 'MeetingPage');
 const GlossaryPage = lazyPage(() => import('../pages/GlossaryPage'), 'GlossaryPage');
 const KitGalleryPage = lazyPage(() => import('../pages/KitGalleryPage'), 'KitGalleryPage');
+const LabStorefrontPage = lazyPage(() => import('../pages/LabStorefrontPage'), 'LabStorefrontPage');
 
 export const routes: RouteObject[] = [
   {
@@ -27,6 +28,7 @@ export const routes: RouteObject[] = [
           { path: 'meeting', element: <MeetingPage /> },
           { path: 'glossary', element: <GlossaryPage /> },
           { path: 'kit', element: <KitGalleryPage /> },
+          { path: 'lab/storefront', element: <LabStorefrontPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

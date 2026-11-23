@@ -1,0 +1,190 @@
+@layer components {
+  .storefront {
+    container-type: inline-size;
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  @container (min-width: 46rem) {
+    .storefront[data-panel='true'] {
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    }
+  }
+
+  .sf-shell {
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .sf-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 0.75rem;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sf-bar b {
+    font-family: var(--font-display);
+  }
+
+  .sf-bar span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .sf-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+    padding: 0.75rem;
+  }
+
+  @container (min-width: 30rem) {
+    .sf-grid {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+
+    .slot[data-wide='true'] {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .sf-error {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0.75rem;
+    padding: 0.75rem;
+    border: 1px dashed var(--bad);
+    border-radius: 0.5rem;
+    color: var(--bad);
+    font-size: 0.86rem;
+  }
+
+  .slot {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    min-height: 5.75rem;
+    padding: 0.75rem;
+    border: 1.5px solid transparent;
+    border-radius: 0.6rem;
+    background: var(--surface-2);
+    transition: border-color 0.2s;
+  }
+
+  .slot[data-xray='true'] {
+    border-style: dashed;
+    border-color: var(--fc);
+  }
+
+  .slot-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .slot-body {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .slot-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .xtag {
+    display: grid;
+    justify-self: start;
+    gap: 0.1rem;
+    max-width: 100%;
+    padding: 0.25rem 0.45rem;
+    border-radius: 0.3rem;
+    background: var(--fc);
+    color: var(--accent-fg);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .xtag-identity {
+    font-weight: 500;
+  }
+
+  .slot-fallback {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.5rem 0.6rem;
+    border: 1px dashed var(--bad);
+    border-radius: 0.45rem;
+    color: var(--bad);
+    font-size: 0.8rem;
+  }
+
+  .slot-reason {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    overflow-wrap: anywhere;
+  }
+
+  .sf-panel {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .sf-group {
+    display: grid;
+    gap: 0.7rem;
+    padding: 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: var(--surface);
+  }
+
+  .sf-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sf-explain {
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+
+  .sf-legend {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .sf-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sf-legend i {
+    flex: none;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 0.2rem;
+    background: var(--fc);
+  }
+}

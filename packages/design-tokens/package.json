@@ -1,0 +1,16 @@
+{
+  "name": "@react-field-guide/design-tokens",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "style": "./tokens.css",
+  "exports": {
+    "./tokens.css": {
+      "style": "./tokens.css",
+      "default": "./tokens.css"
+    }
+  },
+  "files": [
+    "tokens.css"
+  ]
+}
