@@ -7,8 +7,8 @@ import { curriculum, tracks } from '../content/curriculum';
 import { useProgress } from './progress';
 import { Sidebar } from './Sidebar';
 
-vi.mock('../content/registry', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('../content/registry')>()),
+vi.mock('../content/builtSlugs', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../content/builtSlugs')>()),
   isBuilt: (slug: string) => slug === '02-rendering',
 }));
 

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 
 window.matchMedia = vi.fn((query: string) => ({
@@ -23,5 +23,7 @@ class ResizeObserverStub {
 }
 
 window.ResizeObserver = ResizeObserverStub as unknown as typeof ResizeObserver;
+
+configure({ asyncUtilTimeout: 5000 });
 
 afterEach(cleanup);

@@ -1,3 +1,4 @@
+import { isBuilt } from './builtSlugs';
 import { curriculum } from './curriculum';
 import type { ModuleEntry, ModuleMeta } from './types';
 
@@ -24,6 +25,4 @@ export function getModule(slug: string): { meta: ModuleMeta; entry?: ModuleEntry
   return { meta, entry: builtModules[slug] };
 }
 
-export function isBuilt(slug: string): boolean {
-  return Object.hasOwn(builtModules, slug);
-}
+export { isBuilt };

@@ -112,6 +112,7 @@ describe('HomePage map', () => {
     const ready = within(map).getByRole('link', { name: /Rendering & reconciliation/ });
     const done = within(map).getByRole('link', { name: /State & the snapshot model/ });
     expect(planned).toHaveAccessibleName(/planned/);
+    expect(ready).toHaveAccessibleName(/, built/);
     expect(ready).not.toHaveAccessibleName(/planned|completed/);
     expect(done).toHaveAccessibleName(/completed/);
     expect(planned.closest('li')).toHaveAttribute('data-state', 'planned');

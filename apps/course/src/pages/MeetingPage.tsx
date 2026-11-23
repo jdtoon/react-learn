@@ -111,7 +111,7 @@ export function MeetingPage() {
 
   useEffect(() => {
     if (!hash) return;
-    document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
+    document.getElementById(hash.slice(1))?.scrollIntoView();
   }, [hash]);
 
   const groups = tracks

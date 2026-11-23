@@ -3,7 +3,7 @@ import { Dialog } from 'radix-ui';
 import { useId, useRef } from 'react';
 import { NavLink } from 'react-router';
 import { curriculum, tracks } from '../content/curriculum';
-import { isBuilt } from '../content/registry';
+import { isBuilt } from '../content/builtSlugs';
 import { useProgress } from './progress';
 import { padNumber, trackStyle } from './trackStyle';
 

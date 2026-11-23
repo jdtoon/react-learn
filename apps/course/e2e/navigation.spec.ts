@@ -14,7 +14,9 @@ test.describe('command palette', () => {
     await page.keyboard.press('Control+K');
     const dialog = page.getByRole('dialog', { name: 'Search' });
     await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole('combobox')).toBeFocused();
+    await expect(
+      dialog.getByRole('combobox', { name: 'Search modules, terms and talk tracks' }),
+    ).toBeFocused();
     await page.keyboard.type('micro');
     await expect(dialog.getByRole('option').first()).toContainText('Why & when');
     await page.keyboard.press('Enter');
@@ -37,6 +39,7 @@ test.describe('command palette', () => {
   test('arrow keys move the highlight and Enter opens that result', async ({ page }) => {
     await page.goto('/react-learn/');
     await page.keyboard.press('Control+K');
+    await expect(page.getByRole('combobox')).toBeFocused();
     await page.keyboard.type('micro');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
@@ -46,6 +49,7 @@ test.describe('command palette', () => {
   test('shows a message when nothing matches', async ({ page }) => {
     await page.goto('/react-learn/');
     await page.keyboard.press('Control+K');
+    await expect(page.getByRole('combobox')).toBeFocused();
     await page.keyboard.type('zzzzqx');
     await expect(page.getByRole('dialog', { name: 'Search' })).toContainText('No results');
   });
@@ -153,6 +157,7 @@ test.describe('at 390px wide', () => {
     const box = await dialog.boundingBox();
     expect(box?.x ?? -1).toBeGreaterThanOrEqual(0);
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390);
+    await expect(page.getByRole('combobox')).toBeFocused();
     await page.keyboard.type('frame');
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL('/react-learn/modules/11-frame-budget');

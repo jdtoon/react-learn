@@ -17,9 +17,9 @@ afterEach(() => {
   clearBuilt(built);
 });
 
-function renderMeeting() {
+function renderMeeting(entry = '/meeting') {
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={[entry]}>
       <MeetingPage />
     </MemoryRouter>,
   );
@@ -50,6 +50,23 @@ describe('MeetingPage with built modules', () => {
     built['11-frame-budget'] = fixtureEntry('11-frame-budget');
     built['02-rendering'] = fixtureEntry('02-rendering');
   }
+
+  it('scrolls to the card named by the hash', () => {
+    buildTwo();
+    const scroll = vi.mocked(window.HTMLElement.prototype.scrollIntoView);
+    scroll.mockClear();
+    renderMeeting('/meeting#11-frame-budget');
+    expect(scroll).toHaveBeenCalledTimes(1);
+    expect(scroll.mock.contexts[0]).toBe(document.getElementById('11-frame-budget'));
+  });
+
+  it.each(['#%E0%A4%A', '#%', '#missing-card'])('ignores the hash %s without throwing', (hash) => {
+    buildTwo();
+    const scroll = vi.mocked(window.HTMLElement.prototype.scrollIntoView);
+    scroll.mockClear();
+    expect(() => renderMeeting(`/meeting${hash}`)).not.toThrow();
+    expect(scroll).not.toHaveBeenCalled();
+  });
 
   it('groups cards by track in curriculum order', () => {
     buildTwo();

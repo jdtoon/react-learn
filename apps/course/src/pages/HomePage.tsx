@@ -9,9 +9,9 @@ import type { ModuleMeta } from '../content/types';
 
 type NodeState = 'planned' | 'built' | 'complete';
 
-const stateSuffix: Record<NodeState, string | null> = {
+const stateSuffix: Record<NodeState, string> = {
   planned: ', planned',
-  built: null,
+  built: ', built',
   complete: ', completed',
 };
 
@@ -200,7 +200,7 @@ export function HomePage() {
                             </span>{' '}
                             <span className="node-meta">
                               {nodeMeta(module, state)}
-                              {suffix && <span className="sr-only">{suffix}</span>}
+                              <span className="sr-only">{suffix}</span>
                             </span>
                           </span>
                         </Link>
