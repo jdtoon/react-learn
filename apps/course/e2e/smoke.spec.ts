@@ -1,20 +1,26 @@
 import { expect, test, type Page } from '@playwright/test';
 
-async function expectHeadingWithoutErrors(page: Page, url: string) {
+function collectErrors(page: Page) {
   const errors: string[] = [];
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
   });
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto(url);
-  await expect(page.getByRole('heading', { name: 'React Field Guide' })).toBeVisible();
-  expect(errors).toEqual([]);
+  return errors;
 }
 
 test('home renders the heading with no console errors', async ({ page }) => {
-  await expectHeadingWithoutErrors(page, '/react-learn/');
+  const errors = collectErrors(page);
+  await page.goto('/react-learn/');
+  await expect(page.getByRole('heading', { level: 1, name: 'React Field Guide' })).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
 test('an unknown path falls back to the app shell', async ({ page }) => {
-  await expectHeadingWithoutErrors(page, '/react-learn/some/unknown/path');
+  const errors = collectErrors(page);
+  await page.goto('/react-learn/some/unknown/path');
+  await expect(
+    page.getByRole('banner').getByRole('link', { name: 'React Field Guide' }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
 });
