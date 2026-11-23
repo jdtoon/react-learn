@@ -45,6 +45,18 @@ describe('validateModuleContent', () => {
     expect(problems[0]).toContain('http://react.dev/learn');
   });
 
+  it.each(['https:example.com', 'https:/example.com', 'https://'])(
+    'reports a link without https:// followed by a host: %s',
+    (url) => {
+      const base = validContent(slug);
+      const problems = problemsFor({
+        links: [{ label: 'Loose', url }, ...base.links.slice(1)],
+      });
+      expect(problems).toHaveLength(1);
+      expect(problems[0]).toMatch(/https/);
+    },
+  );
+
   it('reports a malformed link url', () => {
     const base = validContent(slug);
     const problems = problemsFor({

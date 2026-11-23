@@ -485,7 +485,7 @@
   }
 
   .cmp[data-pair] .cmp-panel:not([data-active]) {
-    display: block;
+    display: grid;
   }
 }
 

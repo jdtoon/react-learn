@@ -21,6 +21,7 @@ function inRange(count: number, min: number, max: number): boolean {
 }
 
 function isHttps(url: string): boolean {
+  if (!url.startsWith('https://')) return false;
   try {
     return new URL(url).protocol === 'https:';
   } catch {
