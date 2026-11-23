@@ -1,0 +1,75 @@
+.recs-v2 {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  border: 1px solid var(--react);
+  border-radius: 0.6rem;
+  background: color-mix(in oklab, var(--react) 10%, var(--surface));
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+}
+
+.recs-v2-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+}
+
+.recs-v2-badge {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--react);
+  color: var(--accent-fg);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.recs-v2-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recs-v2-card {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--bg);
+}
+
+.recs-v2-art {
+  height: 2.2rem;
+  border-radius: 0.35rem;
+  background: linear-gradient(135deg, var(--react), var(--accent));
+  opacity: 0.55;
+}
+
+.recs-v2-name {
+  font-weight: 600;
+}
+
+.recs-v2-why {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.recs-v2-price {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--react);
+}
+
+.recs-v2-delivery {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+}

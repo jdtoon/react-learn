@@ -1,0 +1,103 @@
+.iso {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+}
+
+.iso-lead,
+.iso-note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.iso-note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.iso-list,
+.iso-cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.iso-list {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.iso-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.iso-price {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.iso-v2 {
+  padding: 0.6rem;
+  border: 1px solid var(--react);
+  border-radius: 0.6rem;
+  background: color-mix(in oklab, var(--react) 10%, var(--surface));
+}
+
+.iso-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+}
+
+.iso-badge {
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--react);
+  color: var(--accent-fg);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.iso-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: 0.5rem;
+}
+
+.iso-card {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: var(--bg);
+}
+
+.iso-art {
+  height: 2.2rem;
+  border-radius: 0.35rem;
+  background: linear-gradient(135deg, var(--react), var(--accent));
+  opacity: 0.55;
+}
+
+.iso-name {
+  font-weight: 600;
+}
+
+.iso-why {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.iso-card .iso-price {
+  color: var(--react);
+}

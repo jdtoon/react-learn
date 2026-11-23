@@ -130,7 +130,7 @@ describe('Storefront', () => {
   });
 
   it('ignores controls that are not wired yet', async () => {
-    render(<Storefront controls={['xray', 'kill', 'version', 'isolation', 'css-leak', 'log']} />);
+    render(<Storefront controls={['xray', 'css-leak']} />);
     await screen.findByTestId('remote-react-catalog');
 
     expect(screen.getAllByRole('button')).toHaveLength(1);

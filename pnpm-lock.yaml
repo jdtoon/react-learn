@@ -298,6 +298,40 @@ importers:
         specifier: 5.1.1
         version: 5.1.1(@types/node@24.19.2)(jsdom@31.0.1)(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))
 
+  mfe/react-cart:
+    dependencies:
+      '@react-field-guide/mfe-contracts':
+        specifier: workspace:*
+        version: link:../../packages/mfe-contracts
+      react:
+        specifier: 19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: 19.3.1
+        version: 19.3.1(react@19.3.1)
+    devDependencies:
+      '@module-federation/vite':
+        specifier: 1.24.1
+        version: 1.24.1(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))
+      '@react-field-guide/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
+      '@types/node':
+        specifier: 24.19.2
+        version: 24.19.2
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      '@vitejs/plugin-react':
+        specifier: 6.3.0
+        version: 6.3.0(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))
+      vite:
+        specifier: 8.3.8
+        version: 8.3.8(@types/node@24.19.2)(jiti@2.7.0)
+
   mfe/react-catalog:
     dependencies:
       '@react-field-guide/mfe-contracts':
@@ -349,6 +383,68 @@ importers:
       vitest:
         specifier: 5.1.1
         version: 5.1.1(@types/node@24.19.2)(jsdom@31.0.1)(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))
+
+  mfe/react-recs:
+    dependencies:
+      '@react-field-guide/mfe-contracts':
+        specifier: workspace:*
+        version: link:../../packages/mfe-contracts
+      react:
+        specifier: 19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: 19.3.1
+        version: 19.3.1(react@19.3.1)
+    devDependencies:
+      '@module-federation/vite':
+        specifier: 1.24.1
+        version: 1.24.1(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))
+      '@react-field-guide/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
+      '@types/node':
+        specifier: 24.19.2
+        version: 24.19.2
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      '@vitejs/plugin-react':
+        specifier: 6.3.0
+        version: 6.3.0(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0))
+      vite:
+        specifier: 8.3.8
+        version: 8.3.8(@types/node@24.19.2)(jiti@2.7.0)
+
+  mfe/react-recs-isolated:
+    dependencies:
+      '@react-field-guide/mfe-contracts':
+        specifier: workspace:*
+        version: link:../../packages/mfe-contracts
+      react:
+        specifier: 19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: 19.3.1
+        version: 19.3.1(react@19.3.1)
+    devDependencies:
+      '@react-field-guide/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
+      '@types/node':
+        specifier: 24.19.2
+        version: 24.19.2
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      vite:
+        specifier: 8.3.8
+        version: 8.3.8(@types/node@24.19.2)(jiti@2.7.0)
 
   packages/design-tokens: {}
 

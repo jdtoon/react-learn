@@ -1,0 +1,42 @@
+{
+  "name": "@react-field-guide/react-cart",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@react-field-guide/mfe-contracts": "workspace:*",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@module-federation/vite": "1.24.1",
+    "@react-field-guide/design-tokens": "workspace:*",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "vite": "8.3.8"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "react-cart",
+        "slot": "cart",
+        "team": "Checkout",
+        "framework": "react",
+        "kind": "federation",
+        "container": "react_cart",
+        "expose": "./Cart",
+        "entry": "remoteEntry.js",
+        "path": "react-cart",
+        "devPort": 5202,
+        "live": true
+      }
+    ]
+  }
+}

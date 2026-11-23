@@ -15,6 +15,7 @@ export interface BusEntry {
   payload: unknown;
   at: number;
   delivered: number;
+  subscribers: string[];
 }
 
 interface Subscription {
@@ -59,10 +60,11 @@ export function emit<K extends MfeEventType>(
   source: string,
 ): number {
   const state = bus();
-  let delivered = 0;
+  const subscribers: string[] = [];
   for (const subscription of state.subscriptions.values()) {
-    if (subscription.type === type) delivered += 1;
+    if (subscription.type === type) subscribers.push(subscription.name);
   }
+  const delivered = subscribers.length;
 
   const entry: BusEntry = {
     id: state.nextEntryId,
@@ -71,6 +73,7 @@ export function emit<K extends MfeEventType>(
     payload,
     at: Date.now(),
     delivered,
+    subscribers,
   };
   state.nextEntryId += 1;
   state.log.push(entry);

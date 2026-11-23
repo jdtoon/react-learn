@@ -1,0 +1,65 @@
+{
+  "name": "@react-field-guide/react-recs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node build.mjs",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@react-field-guide/mfe-contracts": "workspace:*",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@module-federation/vite": "1.24.1",
+    "@react-field-guide/design-tokens": "workspace:*",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "vite": "8.3.8"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "react-recs-v1",
+        "slot": "recs",
+        "team": "Personalisation",
+        "framework": "react",
+        "kind": "federation",
+        "container": "react_recs_v1",
+        "expose": "./Recs",
+        "entry": "remoteEntry.js",
+        "path": "react-recs/v1",
+        "dist": "dist/v1",
+        "devPort": 5203,
+        "devEnv": {
+          "RECS_VERSION": "v1"
+        },
+        "version": "1.0.0",
+        "live": true
+      },
+      {
+        "id": "react-recs-v2",
+        "slot": "recs",
+        "team": "Personalisation",
+        "framework": "react",
+        "kind": "federation",
+        "container": "react_recs_v2",
+        "expose": "./Recs",
+        "entry": "remoteEntry.js",
+        "path": "react-recs/v2",
+        "dist": "dist/v2",
+        "devPort": 5204,
+        "devEnv": {
+          "RECS_VERSION": "v2"
+        },
+        "version": "2.0.0",
+        "live": false
+      }
+    ]
+  }
+}

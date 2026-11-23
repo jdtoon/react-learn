@@ -1,5 +1,12 @@
 import type { RemoteDescriptor, RemoteKind } from '@react-field-guide/mfe-contracts';
-import React, { Component, useEffect, useState, type ComponentType, type ReactNode } from 'react';
+import React, {
+  Component,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from 'react';
 import { loadFederated } from './federation';
 import { SlotFrame, type ReactIdentity, type SlotState } from './SlotFrame';
 import { slotMeta } from './slots';
@@ -11,7 +18,36 @@ export interface LoadedRemote {
   probe?: () => Promise<ReactIdentity | null>;
 }
 
-export type RemoteLoader = (descriptor: RemoteDescriptor) => Promise<LoadedRemote>;
+export interface MountContext {
+  version: string;
+}
+
+export type RemoteLoader = (
+  descriptor: RemoteDescriptor,
+  context: MountContext,
+) => Promise<LoadedRemote>;
+
+export interface SlotMeasure {
+  id: string;
+  identity: ReactIdentity | null;
+  bytes: number;
+}
+
+interface MountModule {
+  mount?: (element: HTMLElement, props: MountContext) => () => void;
+  reactIdentity?: unknown;
+}
+
+export function transferredBytes(url: string): number {
+  const prefix = url.slice(0, url.lastIndexOf('/') + 1);
+  let total = 0;
+  for (const entry of performance.getEntriesByType('resource')) {
+    if (!entry.name.startsWith(prefix)) continue;
+    const timing = entry as PerformanceResourceTiming;
+    total += timing.transferSize > 0 ? timing.transferSize : timing.encodedBodySize;
+  }
+  return total;
+}
 
 async function loadFederationRemote(descriptor: RemoteDescriptor): Promise<LoadedRemote> {
   const module = await loadFederated<{ default?: ComponentType }>(descriptor);
@@ -32,8 +68,36 @@ async function loadFederationRemote(descriptor: RemoteDescriptor): Promise<Loade
   };
 }
 
+async function loadModuleMount(
+  descriptor: RemoteDescriptor,
+  context: MountContext,
+): Promise<LoadedRemote> {
+  const module = (await import(descriptor.url)) as MountModule;
+  const { mount } = module;
+  if (typeof mount !== 'function') throw new Error(`${descriptor.id} does not export mount`);
+
+  const MountedRemote = () => {
+    const target = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      const element = target.current;
+      if (!element) return;
+      return mount(element, context);
+    }, []);
+    return <div ref={target} className="slot-mount" />;
+  };
+
+  return {
+    Component: MountedRemote,
+    probe: async () => {
+      if (module.reactIdentity === undefined) return null;
+      return module.reactIdentity === React ? 'same' : 'different';
+    },
+  };
+}
+
 const loaders: Partial<Record<RemoteKind, RemoteLoader>> = {
   federation: loadFederationRemote,
+  'module-mount': loadModuleMount,
 };
 
 type LoadState =
@@ -88,9 +152,11 @@ interface LoadedSlotProps {
   loader: RemoteLoader;
   title: string;
   xray: boolean;
+  version: string;
+  onMeasure: ((slot: string, measure: SlotMeasure | null) => void) | undefined;
 }
 
-function LoadedSlot({ descriptor, loader, title, xray }: LoadedSlotProps) {
+function LoadedSlot({ descriptor, loader, title, xray, version, onMeasure }: LoadedSlotProps) {
   const [load, setLoad] = useState<LoadState>({ status: 'loading' });
   const [identity, setIdentity] = useState<ReactIdentity | null>(null);
   const [crash, setCrash] = useState<Error | null>(null);
@@ -112,7 +178,7 @@ function LoadedSlot({ descriptor, loader, title, xray }: LoadedSlotProps) {
       });
     }, REMOTE_LOAD_TIMEOUT_MS);
 
-    loader(descriptor).then(
+    loader(descriptor, { version }).then(
       (loaded) => settle({ status: 'ready', loaded, loadMs: performance.now() - started }),
       (error: unknown) =>
         settle({
@@ -126,7 +192,7 @@ function LoadedSlot({ descriptor, loader, title, xray }: LoadedSlotProps) {
       settled = true;
       clearTimeout(timer);
     };
-  }, [descriptor, loader]);
+  }, [descriptor, loader, version]);
 
   const probe = load.status === 'ready' ? load.loaded.probe : undefined;
   useEffect(() => {
@@ -139,6 +205,17 @@ function LoadedSlot({ descriptor, loader, title, xray }: LoadedSlotProps) {
       active = false;
     };
   }, [probe]);
+
+  const ready = load.status === 'ready' && !crash;
+  useEffect(() => {
+    if (!ready || !onMeasure) return;
+    onMeasure(descriptor.slot, {
+      id: descriptor.id,
+      identity,
+      bytes: transferredBytes(descriptor.url),
+    });
+    return () => onMeasure(descriptor.slot, null);
+  }, [ready, identity, descriptor, onMeasure]);
 
   let state: SlotState = load.status;
   if (crash) state = 'failed';
@@ -177,9 +254,12 @@ function LoadedSlot({ descriptor, loader, title, xray }: LoadedSlotProps) {
 export interface RemoteSlotProps {
   descriptor: RemoteDescriptor;
   xray: boolean;
+  version?: string;
+  onMeasure?: (slot: string, measure: SlotMeasure | null) => void;
 }
 
-export function RemoteSlot({ descriptor, xray }: RemoteSlotProps) {
+export function RemoteSlot({ descriptor, xray, version, onMeasure }: RemoteSlotProps) {
+  const mountVersion = version ?? descriptor.version;
   const title = slotMeta(descriptor.slot)?.title ?? descriptor.slot;
   const loader = loaders[descriptor.kind];
 
@@ -201,11 +281,13 @@ export function RemoteSlot({ descriptor, xray }: RemoteSlotProps) {
 
   return (
     <LoadedSlot
-      key={`${descriptor.id}|${descriptor.url}`}
+      key={`${descriptor.id}|${descriptor.url}|${mountVersion}`}
       descriptor={descriptor}
       loader={loader}
       title={title}
       xray={xray}
+      version={mountVersion}
+      onMeasure={onMeasure}
     />
   );
 }
