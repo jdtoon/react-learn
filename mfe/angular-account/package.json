@@ -1,0 +1,47 @@
+{
+  "name": "@react-field-guide/angular-account",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ng serve --port 5209",
+    "build": "ng build",
+    "typecheck": "ngc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@angular/common": "22.3.0",
+    "@angular/compiler": "22.3.0",
+    "@angular/core": "22.3.0",
+    "@angular/elements": "22.3.0",
+    "@angular/platform-browser": "22.3.0",
+    "@react-field-guide/mfe-contracts": "workspace:*",
+    "rxjs": "7.8.2",
+    "tslib": "2.9.1"
+  },
+  "devDependencies": {
+    "@angular/build": "22.3.0",
+    "@angular/cli": "22.3.0",
+    "@angular/compiler-cli": "22.3.0",
+    "@react-field-guide/design-tokens": "workspace:*"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "angular-account",
+        "slot": "account",
+        "team": "Identity",
+        "framework": "angular",
+        "kind": "web-component",
+        "tag": "rfg-angular-account",
+        "entry": "main.js",
+        "path": "angular-account",
+        "devPort": 5209,
+        "devBin": "@angular/cli/bin/ng.js",
+        "devArgs": [
+          "serve"
+        ],
+        "live": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@react-field-guide/legacy-iframe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@react-field-guide/design-tokens": "workspace:*",
+    "vite": "8.3.8"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "legacy-iframe",
+        "slot": "locator",
+        "team": "Stores",
+        "framework": "plain",
+        "kind": "iframe",
+        "entry": "locator.html",
+        "path": "legacy-iframe",
+        "devPort": 5208,
+        "live": true
+      }
+    ]
+  }
+}

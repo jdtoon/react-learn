@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.acct {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+}
+
+.acct-greeting,
+.acct-note {
+  margin: 0;
+}
+
+.acct-greeting strong {
+  color: var(--angular);
+}
+
+.acct-note {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.acct-field {
+  display: grid;
+  gap: 0.2rem;
+  color: var(--muted);
+}
+
+.acct-field input {
+  min-height: 1.9rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+}
+
+.acct-button {
+  justify-self: start;
+  min-height: 1.9rem;
+  padding: 0 0.8rem;
+  border: 1px solid var(--angular);
+  border-radius: 0.4rem;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.acct-button:hover {
+  background: var(--surface);
+}
+
+.acct-button:focus-visible,
+.acct-field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

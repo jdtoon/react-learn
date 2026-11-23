@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Store locator</title>
+    <link rel="stylesheet" href="./src/locator.css" />
+  </head>
+  <body>
+    <main class="loc" data-framework="plain">
+      <h4 class="loc-title">Find a store</h4>
+      <label class="loc-search">
+        <span>Search by suburb</span>
+        <input id="loc-filter" type="search" autocomplete="off" placeholder="Try Gardens" />
+      </label>
+      <ul class="loc-list" id="loc-list" aria-label="Stores">
+        <li data-store-id="cpt-gardens" data-label="Cape Town Gardens">
+          <button type="button" class="loc-store">
+            <strong>Cape Town Gardens</strong>
+            <span>Open until 19:00</span>
+          </button>
+        </li>
+        <li data-store-id="jhb-rosebank" data-label="Johannesburg Rosebank">
+          <button type="button" class="loc-store">
+            <strong>Johannesburg Rosebank</strong>
+            <span>Open until 20:00</span>
+          </button>
+        </li>
+        <li data-store-id="dbn-umhlanga" data-label="Durban Umhlanga">
+          <button type="button" class="loc-store">
+            <strong>Durban Umhlanga</strong>
+            <span>Open until 18:30</span>
+          </button>
+        </li>
+        <li data-store-id="stb-dorp" data-label="Stellenbosch Dorp Street">
+          <button type="button" class="loc-store">
+            <strong>Stellenbosch Dorp Street</strong>
+            <span>Open until 17:00</span>
+          </button>
+        </li>
+      </ul>
+      <p class="loc-status" id="loc-status" role="status">No store selected.</p>
+    </main>
+    <script type="module" src="./src/locator.js"></script>
+  </body>
+</html>

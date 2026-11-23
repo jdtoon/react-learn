@@ -1,0 +1,86 @@
+:host,
+rfg-vue-reviews-light {
+  display: block;
+}
+
+.rv {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+}
+
+.rv-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.rv-summary {
+  margin: 0;
+  color: var(--muted);
+}
+
+.rv-summary strong {
+  color: var(--vue);
+  font-family: var(--font-mono);
+}
+
+.rv-list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rv-item {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem 0.6rem;
+  border-left: 3px solid var(--vue);
+  border-radius: 0.4rem;
+  background: var(--surface);
+}
+
+.rv-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.6rem;
+  margin: 0;
+}
+
+.rv-stars {
+  color: var(--warn);
+  letter-spacing: 0.08em;
+}
+
+.rv-text {
+  margin: 0;
+  color: var(--muted);
+}
+
+.rv-helpful {
+  justify-self: start;
+  min-height: 1.6rem;
+  padding: 0 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.rv-helpful[aria-pressed='true'],
+.rv-helpful:hover {
+  border-color: var(--vue);
+}
+
+.rv-helpful:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

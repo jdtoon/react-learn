@@ -1,0 +1,38 @@
+{
+  "name": "@react-field-guide/svelte-promo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "@react-field-guide/mfe-contracts": "workspace:*",
+    "svelte": "5.59.1"
+  },
+  "devDependencies": {
+    "@react-field-guide/design-tokens": "workspace:*",
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@types/node": "24.19.2",
+    "svelte-check": "4.7.8",
+    "vite": "8.3.8"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "svelte-promo",
+        "slot": "promo",
+        "team": "Growth",
+        "framework": "svelte",
+        "kind": "web-component",
+        "tag": "rfg-svelte-promo",
+        "entry": "promo.js",
+        "path": "svelte-promo",
+        "devPort": 5207,
+        "live": true
+      }
+    ]
+  }
+}

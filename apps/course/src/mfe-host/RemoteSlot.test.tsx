@@ -160,12 +160,17 @@ describe('RemoteSlot', () => {
   it('says a kind is not wired yet instead of loading it', () => {
     render(
       <RemoteSlot
-        descriptor={{ ...catalog, id: 'vue-reviews', slot: 'reviews', kind: 'web-component' }}
+        descriptor={{
+          ...catalog,
+          id: 'vue-reviews',
+          slot: 'reviews',
+          kind: 'wasm' as RemoteDescriptor['kind'],
+        }}
         xray={false}
       />,
     );
 
-    expect(screen.getByRole('status')).toHaveTextContent('web-component is not wired yet');
+    expect(screen.getByRole('status')).toHaveTextContent('wasm is not wired yet');
     expect(loadFederated).not.toHaveBeenCalled();
   });
 

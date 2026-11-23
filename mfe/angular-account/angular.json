@@ -1,0 +1,44 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "analytics": false,
+    "packageManager": "pnpm",
+    "cache": { "enabled": true, "path": "node_modules/.cache/angular" }
+  },
+  "projects": {
+    "angular-account": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.json",
+            "outputPath": { "base": "dist", "browser": "" },
+            "outputHashing": "none",
+            "baseHref": "/react-learn/remotes/angular-account/",
+            "index": false,
+            "polyfills": [],
+            "extractLicenses": false
+          },
+          "configurations": {
+            "production": { "optimization": true },
+            "development": { "optimization": false, "sourceMap": true }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "angular-account:build:development",
+            "servePath": "/react-learn/remotes/angular-account/",
+            "prebundle": { "exclude": ["@react-field-guide/mfe-contracts"] }
+          }
+        }
+      }
+    }
+  }
+}

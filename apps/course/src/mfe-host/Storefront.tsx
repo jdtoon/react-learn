@@ -9,6 +9,7 @@ import { loadManifest } from './manifest';
 import { RemoteSlot, type SlotMeasure } from './RemoteSlot';
 import { SlotFrame } from './SlotFrame';
 import { formatBytes, storefrontSlots } from './slots';
+import { ComponentVariantContext, type ComponentVariant } from './variant';
 import './storefront.css';
 
 export type StorefrontControl = 'xray' | 'kill' | 'version' | 'isolation' | 'css-leak' | 'log';
@@ -35,6 +36,13 @@ const legend = [
 const explainOff = "With X-ray off, the page looks like one app. That's the point.";
 const explainOn =
   'Each dashed box is a separate app owned by a separate team, built and deployed on its own schedule. Colour shows framework and integration style.';
+
+const leakStyleId = 'rfg-css-leak';
+const leakStyles = `.storefront .slot-body :is(h3, h4, p, li, span, strong, label, a, button, input, code) {
+  font-family: Georgia, 'Times New Roman', serif !important;
+  color: crimson !important;
+  letter-spacing: 0.04em !important;
+}`;
 
 const recsVersions: readonly RecsVersion[] = ['v1', 'v2'];
 const isolatedRecsId = 'react-recs-isolated';
@@ -121,12 +129,15 @@ export function Storefront({ controls }: StorefrontProps) {
   const [isolated, setIsolated] = useState(false);
   const [killed, setKilled] = useState<ReadonlySet<string>>(new Set());
   const [measures, setMeasures] = useState<Record<string, SlotMeasure>>({});
+  const [leak, setLeak] = useState(false);
+  const [variant, setVariant] = useState<ComponentVariant>('shadow');
 
   const hasXray = controls.includes('xray');
   const hasKill = controls.includes('kill');
   const hasVersion = controls.includes('version');
   const hasIsolation = controls.includes('isolation');
   const hasLog = controls.includes('log');
+  const hasLeak = controls.includes('css-leak');
   const hasPanel = controls.length > 0;
 
   const onMeasure = useCallback((slot: string, measure: SlotMeasure | null) => {
@@ -137,6 +148,15 @@ export function Storefront({ controls }: StorefrontProps) {
   }, []);
 
   const recsSubscribers = useRecsSubscribers(hasVersion || hasIsolation);
+
+  useEffect(() => {
+    if (!hasLeak || !leak) return;
+    const style = document.createElement('style');
+    style.id = leakStyleId;
+    style.textContent = leakStyles;
+    document.head.append(style);
+    return () => style.remove();
+  }, [hasLeak, leak]);
 
   const descriptors = useMemo(() => {
     const switches: Switches = {
@@ -182,34 +202,36 @@ export function Storefront({ controls }: StorefrontProps) {
             <p className="slot-reason">{manifest.message}</p>
           </div>
         ) : (
-          <div className="sf-grid">
-            {storefrontSlots.map((slot) => {
-              const descriptor = descriptors.get(slot.id);
-              if (descriptor) {
+          <ComponentVariantContext value={hasLeak ? variant : 'shadow'}>
+            <div className="sf-grid">
+              {storefrontSlots.map((slot) => {
+                const descriptor = descriptors.get(slot.id);
+                if (descriptor) {
+                  return (
+                    <RemoteSlot
+                      key={slot.id}
+                      descriptor={descriptor}
+                      xray={xray}
+                      onMeasure={onMeasure}
+                      {...(slot.id === 'recs' && hasVersion ? { version: recsVersion } : {})}
+                    />
+                  );
+                }
+                const loading = manifest.status === 'loading';
                 return (
-                  <RemoteSlot
+                  <SlotFrame
                     key={slot.id}
-                    descriptor={descriptor}
+                    slot={slot.id}
+                    title={slot.title}
                     xray={xray}
-                    onMeasure={onMeasure}
-                    {...(slot.id === 'recs' && hasVersion ? { version: recsVersion } : {})}
-                  />
+                    state={loading ? 'loading' : 'empty'}
+                  >
+                    <p className="slot-note">{loading ? 'Loading' : 'Not built yet'}</p>
+                  </SlotFrame>
                 );
-              }
-              const loading = manifest.status === 'loading';
-              return (
-                <SlotFrame
-                  key={slot.id}
-                  slot={slot.id}
-                  title={slot.title}
-                  xray={xray}
-                  state={loading ? 'loading' : 'empty'}
-                >
-                  <p className="slot-note">{loading ? 'Loading' : 'Not built yet'}</p>
-                </SlotFrame>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          </ComponentVariantContext>
         )}
       </div>
 
@@ -315,6 +337,45 @@ export function Storefront({ controls }: StorefrontProps) {
                   </dd>
                 </div>
               </dl>
+            </div>
+          )}
+
+          {hasLeak && (
+            <div className="sf-group" data-control="css-leak">
+              <span className="eyebrow">CSS isolation</span>
+              <div className="sf-controls">
+                <button
+                  type="button"
+                  className="kit-btn"
+                  aria-pressed={leak}
+                  onClick={() => setLeak((value) => !value)}
+                >
+                  CSS leak
+                </button>
+              </div>
+              <div className="sf-controls" role="group" aria-label="Web component variant">
+                <button
+                  type="button"
+                  className="kit-btn"
+                  aria-pressed={variant === 'shadow'}
+                  onClick={() => setVariant('shadow')}
+                >
+                  Shadow DOM
+                </button>
+                <button
+                  type="button"
+                  className="kit-btn"
+                  aria-pressed={variant === 'light'}
+                  onClick={() => setVariant('light')}
+                >
+                  Light DOM
+                </button>
+              </div>
+              <p className="sf-explain" data-leak={leak ? 'on' : 'off'} aria-live="polite">
+                {leak
+                  ? 'A global stylesheet now restyles every heading, paragraph and button on the page. Light DOM remotes take it. Shadow roots, the Angular element and the iframe do not.'
+                  : 'Turn the leak on, then switch the Vue and Svelte web components between shadow and light DOM to see when the host stylesheet can reach them.'}
+              </p>
             </div>
           )}
 

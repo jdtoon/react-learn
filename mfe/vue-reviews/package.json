@@ -1,0 +1,38 @@
+{
+  "name": "@react-field-guide/vue-reviews",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "vue-tsc"
+  },
+  "dependencies": {
+    "@react-field-guide/mfe-contracts": "workspace:*",
+    "vue": "3.5.46"
+  },
+  "devDependencies": {
+    "@react-field-guide/design-tokens": "workspace:*",
+    "@types/node": "24.19.2",
+    "@vitejs/plugin-vue": "6.0.11",
+    "vite": "8.3.8",
+    "vue-tsc": "3.3.14"
+  },
+  "mfe": {
+    "remotes": [
+      {
+        "id": "vue-reviews",
+        "slot": "reviews",
+        "team": "Community",
+        "framework": "vue",
+        "kind": "web-component",
+        "tag": "rfg-vue-reviews",
+        "entry": "reviews.js",
+        "path": "vue-reviews",
+        "devPort": 5206,
+        "live": true
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { RemoteDescriptor, RemoteManifest } from '@react-field-guide/mfe-contracts';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { StorefrontControl } from './Storefront';
 
 const loadManifest = vi.fn();
 
@@ -130,7 +131,7 @@ describe('Storefront', () => {
   });
 
   it('ignores controls that are not wired yet', async () => {
-    render(<Storefront controls={['xray', 'css-leak']} />);
+    render(<Storefront controls={['xray', 'unknown' as StorefrontControl]} />);
     await screen.findByTestId('remote-react-catalog');
 
     expect(screen.getAllByRole('button')).toHaveLength(1);

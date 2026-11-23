@@ -24,6 +24,8 @@ export interface RemoteSource {
   dist: string;
   devPort: number;
   devEnv: Record<string, string>;
+  devBin?: string;
+  devArgs: string[];
   live: boolean;
   packageName: string;
   dir: string;
@@ -69,6 +71,14 @@ function parseEnv(value: unknown, where: string): Record<string, string> {
   return value as Record<string, string>;
 }
 
+function parseArgs(value: unknown, where: string): string[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.some((entry) => typeof entry !== 'string')) {
+    throw new Error(`${where}: "devArgs" must be a list of strings`);
+  }
+  return value as string[];
+}
+
 function parseRemote(
   raw: unknown,
   pkg: Record<string, unknown>,
@@ -104,6 +114,7 @@ function parseRemote(
     dist: optionalText(raw, 'dist', where) ?? 'dist',
     devPort,
     devEnv: parseEnv(raw['devEnv'], where),
+    devArgs: parseArgs(raw['devArgs'], where),
     live: raw['live'] === true,
     packageName,
     dir,
@@ -111,6 +122,8 @@ function parseRemote(
   const container = optionalText(raw, 'container', where);
   const expose = optionalText(raw, 'expose', where);
   const tag = optionalText(raw, 'tag', where);
+  const devBin = optionalText(raw, 'devBin', where);
+  if (devBin !== undefined) source.devBin = devBin;
   if (container !== undefined) source.container = container;
   if (expose !== undefined) source.expose = expose;
   if (tag !== undefined) source.tag = tag;
@@ -263,8 +276,12 @@ export function devProcesses(root: string, sources: RemoteSource[]): DevProcess[
     ...sources.map((source) => ({
       name: source.id,
       cwd: source.dir,
-      viteBin: viteBin(source.dir),
-      args: ['--port', String(source.devPort), '--strictPort'],
+      viteBin: source.devBin
+        ? path.join(source.dir, 'node_modules', ...source.devBin.split('/'))
+        : viteBin(source.dir),
+      args: source.devBin
+        ? [...source.devArgs, '--port', String(source.devPort)]
+        : ['--port', String(source.devPort), '--strictPort'],
       env: source.devEnv,
     })),
   ];

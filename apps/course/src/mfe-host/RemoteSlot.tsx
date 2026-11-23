@@ -1,6 +1,8 @@
-import type { RemoteDescriptor, RemoteKind } from '@react-field-guide/mfe-contracts';
+import { emit, type RemoteDescriptor, type RemoteKind } from '@react-field-guide/mfe-contracts';
 import React, {
   Component,
+  createElement,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -10,6 +12,7 @@ import React, {
 import { loadFederated } from './federation';
 import { SlotFrame, type ReactIdentity, type SlotState } from './SlotFrame';
 import { slotMeta } from './slots';
+import { ComponentVariantContext } from './variant';
 
 export const REMOTE_LOAD_TIMEOUT_MS = 8000;
 
@@ -95,9 +98,95 @@ async function loadModuleMount(
   };
 }
 
+async function loadWebComponent(descriptor: RemoteDescriptor): Promise<LoadedRemote> {
+  const { tag } = descriptor;
+  if (!tag) throw new Error(`${descriptor.id} has no element tag`);
+  await import(descriptor.url);
+  if (!customElements.get(tag)) throw new Error(`${descriptor.id} did not define <${tag}>`);
+
+  const lightTag = `${tag}-light`;
+  const hasLight = customElements.get(lightTag) !== undefined;
+
+  const WebComponent = () => {
+    const variant = useContext(ComponentVariantContext);
+    const light = variant === 'light' && hasLight;
+    return createElement(light ? lightTag : tag, { 'data-variant': light ? 'light' : 'shadow' });
+  };
+  return { Component: WebComponent };
+}
+
+interface StoreSelection {
+  storeId: string;
+  label: string;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function parseStoreSelection(data: unknown): StoreSelection | null {
+  if (!isRecord(data) || data['type'] !== 'locator:store-selected') return null;
+  const payload = data['payload'];
+  if (!isRecord(payload)) return null;
+  const { storeId, label } = payload;
+  if (typeof storeId !== 'string' || typeof label !== 'string') return null;
+  return { storeId, label };
+}
+
+function postTheme(frame: HTMLIFrameElement | null, origin: string): void {
+  frame?.contentWindow?.postMessage(
+    { type: 'host:theme', theme: document.documentElement.dataset['theme'] ?? null },
+    origin,
+  );
+}
+
+async function loadIframe(descriptor: RemoteDescriptor): Promise<LoadedRemote> {
+  const response = await fetch(descriptor.url, { cache: 'no-cache' });
+  if (!response.ok) throw new Error(`${descriptor.id} answered ${response.status}`);
+  if (!response.headers.get('content-type')?.includes('text/html')) {
+    throw new Error(`${descriptor.id} did not return an HTML page`);
+  }
+  const origin = new URL(descriptor.url).origin;
+
+  const Frame = () => {
+    const frame = useRef<HTMLIFrameElement>(null);
+
+    useEffect(() => {
+      const onMessage = (event: MessageEvent) => {
+        if (event.origin !== origin || event.source !== frame.current?.contentWindow) return;
+        const selection = parseStoreSelection(event.data);
+        if (selection) emit('locator:store-selected', selection, 'legacy-iframe');
+      };
+      window.addEventListener('message', onMessage);
+      const observer = new MutationObserver(() => postTheme(frame.current, origin));
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme'],
+      });
+      return () => {
+        window.removeEventListener('message', onMessage);
+        observer.disconnect();
+      };
+    }, []);
+
+    return (
+      <iframe
+        ref={frame}
+        className="slot-iframe"
+        src={descriptor.url}
+        title="Store locator, a separate legacy page"
+        onLoad={() => postTheme(frame.current, origin)}
+      />
+    );
+  };
+  return { Component: Frame };
+}
+
 const loaders: Partial<Record<RemoteKind, RemoteLoader>> = {
   federation: loadFederationRemote,
   'module-mount': loadModuleMount,
+  'web-component': loadWebComponent,
+  iframe: loadIframe,
 };
 
 type LoadState =
