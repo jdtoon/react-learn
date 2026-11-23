@@ -112,6 +112,20 @@ function resolveUrl(value: string, siteBase: string): string {
   }
 }
 
+function acceptedOverride(value: string | undefined, siteBase: string): string | undefined {
+  if (value === undefined) return undefined;
+  try {
+    const url = new URL(value, siteBase);
+    const local =
+      import.meta.env.DEV &&
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      (url.hostname === 'localhost' || url.hostname === '127.0.0.1');
+    return local || url.origin === new URL(siteBase).origin ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function resolveManifest(raw: unknown, options: ResolveOptions): RemoteManifest {
   if (!isRecord(raw)) throw new ManifestError('The manifest is not an object');
   const { remotes, live } = raw;
@@ -128,8 +142,8 @@ export function resolveManifest(raw: unknown, options: ResolveOptions): RemoteMa
   return {
     remotes: remotes.map((entry, index) => {
       const descriptor = parseDescriptor(entry, index);
-      const url = overrides.get(descriptor.id) ?? descriptor.url;
-      return { ...descriptor, url: resolveUrl(url, options.siteBase) };
+      const url = acceptedOverride(overrides.get(descriptor.id), options.siteBase);
+      return { ...descriptor, url: resolveUrl(url ?? descriptor.url, options.siteBase) };
     }),
     live: liveMap,
   };
