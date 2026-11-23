@@ -102,17 +102,24 @@ test.describe('home map', () => {
 });
 
 test.describe('meeting mode and glossary', () => {
-  test('meeting mode shows an empty state while no module has a meeting card', async ({ page }) => {
+  test("meeting mode shows module 02's card", async ({ page }) => {
     await page.goto('/react-learn/meeting');
     await expect(page.getByRole('heading', { level: 1, name: 'Meeting mode' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'No meeting cards yet' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Browse the curriculum' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'No meeting cards yet' })).toHaveCount(0);
+    const card = page.getByRole('article').filter({ hasText: 'Rendering & reconciliation' });
+    await expect(card).toBeVisible();
+    await expect(card.getByText('Red flags', { exact: true })).toBeVisible();
+    await expect(card.getByText('Trade-off', { exact: true })).toBeVisible();
   });
 
-  test('the glossary shows an empty state while no module has terms', async ({ page }) => {
+  test("the glossary shows module 02's terms", async ({ page }) => {
     await page.goto('/react-learn/glossary');
     await expect(page.getByRole('heading', { level: 1, name: 'Glossary' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'No terms yet' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'No terms yet' })).toHaveCount(0);
+    await expect(page.getByRole('term').filter({ hasText: 'Reconciliation' })).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: '02 Rendering & reconciliation' }).first(),
+    ).toBeVisible();
   });
 
   test('the top bar links to meeting mode', async ({ page }) => {
@@ -127,10 +134,12 @@ test.describe('at 390px wide', () => {
 
   test('meeting mode and the glossary do not scroll sideways', async ({ page }) => {
     await page.goto('/react-learn/meeting');
-    await expect(page.getByRole('heading', { name: 'No meeting cards yet' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 3, name: 'Rendering & reconciliation' }),
+    ).toBeVisible();
     await expectNoSidewaysScroll(page);
     await page.goto('/react-learn/glossary');
-    await expect(page.getByRole('heading', { name: 'No terms yet' })).toBeVisible();
+    await expect(page.getByRole('term').filter({ hasText: 'Reconciliation' })).toBeVisible();
     await expectNoSidewaysScroll(page);
   });
 

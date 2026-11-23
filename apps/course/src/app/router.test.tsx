@@ -35,13 +35,29 @@ describe('routes', () => {
     );
   });
 
-  it.each([
-    ['/meeting', 'Meeting mode', 'No meeting cards yet'],
-    ['/glossary', 'Glossary', 'No terms yet'],
-  ])('renders %s with its empty state while no module is built', async (path, title, empty) => {
-    renderAt(path);
-    expect(await screen.findByRole('heading', { level: 1, name: title })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: empty })).toBeInTheDocument();
+  it('renders meeting mode with the card for module 02', async () => {
+    renderAt('/meeting');
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Meeting mode' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Rendering & reconciliation' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'No meeting cards yet' })).not.toBeInTheDocument();
+  });
+
+  it('renders the glossary with the terms from module 02', async () => {
+    renderAt('/glossary');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Glossary' })).toBeInTheDocument();
+    expect(screen.getByText('Reconciliation')).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'No terms yet' })).not.toBeInTheDocument();
+  });
+
+  it('renders module 02 with its title and labs', async () => {
+    renderAt('/modules/02-rendering');
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Rendering & reconciliation' }),
+    ).toBeInTheDocument();
   });
 
   it('renders the lab kit gallery', async () => {
