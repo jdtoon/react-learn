@@ -25,7 +25,7 @@ export const content: ModuleContent = {
     {
       heading: 'What starts a render',
       paragraphs: [
-        'A component renders for four reasons: it mounts, it set its own state, its parent rendered, or a context value it reads changed. A changed prop is a symptom of the parent rendering.',
+        'A component renders for five reasons: it mounts, it set its own state, an external store it subscribes to changed, its parent rendered, or a context value it reads changed. A changed prop is a symptom of the parent rendering.',
         'Rendering flows down. When a component renders, every child element it creates renders too, whether or not its props changed. Two things stop that. `memo` compares each prop with `Object.is` and skips the render when all are equal. An element React already holds, such as `children` passed through a provider, is reused as is. Inline objects, arrays and functions are never equal, so they defeat `memo`. Context changes bypass both.',
         'Setting state to a value `Object.is` considers identical bails out and the children are skipped. React may still call the component once before it settles.',
       ],
@@ -50,7 +50,7 @@ export const content: ModuleContent = {
       id: 'render-tree',
       title: 'Who re-renders?',
       tryThis: [
-        'Press **Change Feed state**. Feed and everything under it renders; `<App>`, `<Sidebar>` and the provider do not',
+        'Press **Change Feed state**. Feed, `<Post A>`, `<Post B>` and `<ThemeBadge>` render, and every other box keeps its count',
         'Press **Change App state**. Tick **Wrap Sidebar in memo** and press **Change App state** again: Sidebar holds its count. Now tick **Pass a fresh array to Sidebar each render** and press **Change App state** once more: Sidebar renders again',
         'Press **Change theme**. Only the provider and `<ThemeBadge>` render, although `<ThemeBadge>` sits deep in the tree',
         'Press **Set App state to same value** and watch the summary below the tree',
@@ -118,8 +118,8 @@ export const content: ModuleContent = {
       cause:
         'A prop is a new object, array or function each render, so the shallow comparison always fails',
       fix: 'Hoist constant values out of the component, wrap callbacks in `useCallback`, or restructure so the expensive part receives `children` or lives lower in the tree',
-      bad: 'function Panel() {\n  return <Chart options={{ legend: true }} onSelect={(id) => setSelected(id)} />;\n}',
-      good: 'const options = { legend: true };\n\nfunction Panel() {\n  const select = useCallback((id) => setSelected(id), []);\n  return <Chart options={options} onSelect={select} />;\n}',
+      bad: 'const Chart = memo(function Chart({ options, onSelect }) {\n  return <button onClick={onSelect}>{options.title}</button>;\n});\n\nfunction Panel() {\n  const [, setCount] = useState(0);\n  return <Chart options={{ title: "Sales" }} onSelect={() => setCount((c) => c + 1)} />;\n}',
+      good: 'const Chart = memo(function Chart({ options, onSelect }) {\n  return <button onClick={onSelect}>{options.title}</button>;\n});\n\nconst options = { title: "Sales" };\n\nfunction Panel() {\n  const [, setCount] = useState(0);\n  const onSelect = useCallback(() => setCount((c) => c + 1), []);\n  return <Chart options={options} onSelect={onSelect} />;\n}',
     },
   ],
   meeting: {
@@ -182,7 +182,7 @@ export const content: ModuleContent = {
     {
       term: 'Trigger',
       definition:
-        'The event that schedules a render: a first mount or a state update. A component then renders because it mounted, owns the changed state, has a parent that rendered, or reads a context that changed.',
+        'The event that schedules a render: a first mount, a state update, or a change in an external store. A component then renders because it mounted, owns the changed state, subscribes to the changed store, has a parent that rendered, or reads a context that changed.',
     },
     {
       term: 'Render',

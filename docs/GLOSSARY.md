@@ -33,4 +33,4 @@ Jump to: [B](#b) · [C](#c) · [K](#k) · [M](#m) · [R](#r) · [S](#s) · [T](#
 
 ## T
 
-- **Trigger**: The event that schedules a render: a first mount or a state update. A component then renders because it mounted, owns the changed state, has a parent that rendered, or reads a context that changed. See [02. Rendering & reconciliation](modules/02-rendering.md).
+- **Trigger**: The event that schedules a render: a first mount, a state update, or a change in an external store. A component then renders because it mounted, owns the changed state, subscribes to the changed store, has a parent that rendered, or reads a context that changed. See [02. Rendering & reconciliation](modules/02-rendering.md).
