@@ -14,7 +14,13 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['scripts/**/*.mjs', 'eslint.config.js', 'apps/*/*.config.ts', 'apps/*/e2e/**/*.ts'],
+    files: [
+      'scripts/**/*.mjs',
+      'eslint.config.js',
+      'apps/*/*.config.ts',
+      'apps/*/e2e/**/*.ts',
+      'apps/*/scripts/**/*.ts',
+    ],
     languageOptions: { globals: globals.node },
   },
 ]);

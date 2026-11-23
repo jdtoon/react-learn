@@ -16,8 +16,8 @@
     "format:check": "prettier --check apps scripts \"*.{js,json}\" pnpm-workspace.yaml",
     "test": "pnpm -r test",
     "e2e": "pnpm --filter @react-field-guide/course e2e",
-    "docs:gen": "echo no docs to generate yet",
-    "docs:check": "echo no docs to check yet"
+    "docs:gen": "node apps/course/scripts/gen-docs.ts",
+    "docs:check": "node apps/course/scripts/gen-docs.ts --check"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

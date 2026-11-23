@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './tokens.css';
 @import './map.css';
+@import './kit.css';
 
 @layer base {
   html {

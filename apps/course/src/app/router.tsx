@@ -12,7 +12,7 @@ const ModuleRoute = lazyPage(() => import('../pages/ModuleRoute'), 'ModuleRoute'
 const NotFoundPage = lazyPage(() => import('../pages/NotFoundPage'), 'NotFoundPage');
 const MeetingPage = lazyPage(() => import('../pages/MeetingPage'), 'MeetingPage');
 const GlossaryPage = lazyPage(() => import('../pages/GlossaryPage'), 'GlossaryPage');
-const KitPage = lazyPage(() => import('../pages/StubPage'), 'KitPage');
+const KitGalleryPage = lazyPage(() => import('../pages/KitGalleryPage'), 'KitGalleryPage');
 
 export const routes: RouteObject[] = [
   {
@@ -26,7 +26,7 @@ export const routes: RouteObject[] = [
           { path: 'modules/:slug', element: <ModuleRoute /> },
           { path: 'meeting', element: <MeetingPage /> },
           { path: 'glossary', element: <GlossaryPage /> },
-          { path: 'kit', element: <KitPage /> },
+          { path: 'kit', element: <KitGalleryPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

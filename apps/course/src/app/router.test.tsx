@@ -44,7 +44,7 @@ describe('routes', () => {
     expect(screen.getByRole('heading', { name: empty })).toBeInTheDocument();
   });
 
-  it('renders the lab kit stub', async () => {
+  it('renders the lab kit gallery', async () => {
     renderAt('/kit');
     expect(await screen.findByRole('heading', { level: 1, name: 'Lab kit' })).toBeInTheDocument();
   });

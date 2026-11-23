@@ -1,75 +1,21 @@
-import { CircleQuestionMark, ClipboardList, Flag, MessageSquareText, Scale } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { ClipboardList } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 import { padNumber, trackStyle } from '../app/trackStyle';
 import { listBuiltContent } from '../content/builtContent';
 import { tracks } from '../content/curriculum';
 import type { ModuleContent, TrackId } from '../content/types';
+import {
+  MeetingCardView,
+  MeetingPartLabel,
+  meetingPartInfo,
+  meetingPartOrder,
+} from '../kit/MeetingCardView';
 
 type Filter = 'all' | TrackId;
-type PartName = 'Say' | 'Ask' | 'Red flags' | 'Trade-off';
 
-const partOrder: PartName[] = ['Say', 'Ask', 'Red flags', 'Trade-off'];
-
-const partInfo: Record<PartName, { hint: string; Icon: LucideIcon; tone: string }> = {
-  Say: {
-    hint: 'Phrases that show you know the concept and can explain it plainly.',
-    Icon: MessageSquareText,
-    tone: 'text-accent',
-  },
-  Ask: {
-    hint: 'Questions that surface the real constraint or the missing context.',
-    Icon: CircleQuestionMark,
-    tone: 'text-accent',
-  },
-  'Red flags': {
-    hint: 'Signs in a design, a diff or a plan that something is off.',
-    Icon: Flag,
-    tone: 'text-bad',
-  },
-  'Trade-off': {
-    hint: 'The cost on the other side of the usual advice, in one sentence.',
-    Icon: Scale,
-    tone: 'text-accent',
-  },
-};
-
-function PartLabel({ name }: { name: PartName }) {
-  const { Icon, tone } = partInfo[name];
-  return (
-    <p className="flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.09em] text-muted">
-      <Icon aria-hidden="true" size={14} className={tone} />
-      {name}
-    </p>
-  );
-}
-
-function CardPart({ name, children }: { name: PartName; children: ReactNode }) {
-  return (
-    <section className="grid content-start gap-2 rounded-xl bg-surface-2 p-3.5">
-      <PartLabel name={name} />
-      {children}
-    </section>
-  );
-}
-
-function BulletList({ items }: { items: string[] }) {
-  return (
-    <ul className="grid gap-1.5 text-[0.9rem] leading-snug">
-      {items.map((item) => (
-        <li key={item} className="flex gap-2">
-          <span aria-hidden="true" className="mt-[0.55em] size-1 shrink-0 rounded-full bg-muted" />
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function MeetingCardView({ content }: { content: ModuleContent }) {
+function ModuleMeetingCard({ content }: { content: ModuleContent }) {
   const headingId = `card-${content.slug}`;
-  const { say, ask, redFlags, tradeoff } = content.meeting;
 
   return (
     <article
@@ -89,20 +35,7 @@ function MeetingCardView({ content }: { content: ModuleContent }) {
         </h3>
         <p className="max-w-[64ch] text-sm text-muted">{content.oneIdea}</p>
       </header>
-      <div className="grid gap-3 @2xl:grid-cols-2">
-        <CardPart name="Say">
-          <BulletList items={say} />
-        </CardPart>
-        <CardPart name="Ask">
-          <BulletList items={ask} />
-        </CardPart>
-        <CardPart name="Red flags">
-          <BulletList items={redFlags} />
-        </CardPart>
-        <CardPart name="Trade-off">
-          <p className="text-[0.9rem] leading-snug">{tradeoff}</p>
-        </CardPart>
-      </div>
+      <MeetingCardView card={content.meeting} />
     </article>
   );
 }
@@ -124,10 +57,10 @@ function EmptyState() {
         </p>
       </div>
       <ul className="grid gap-3 @2xl:grid-cols-2">
-        {partOrder.map((name) => (
+        {meetingPartOrder.map((name) => (
           <li key={name} className="grid gap-1.5 rounded-xl border border-line bg-bg p-4">
-            <PartLabel name={name} />
-            <p className="text-sm">{partInfo[name].hint}</p>
+            <MeetingPartLabel name={name} />
+            <p className="text-sm">{meetingPartInfo[name].hint}</p>
           </li>
         ))}
       </ul>
@@ -235,7 +168,7 @@ export function MeetingPage() {
                   </div>
                   <div className="grid gap-4">
                     {modules.map((content) => (
-                      <MeetingCardView key={content.slug} content={content} />
+                      <ModuleMeetingCard key={content.slug} content={content} />
                     ))}
                   </div>
                 </section>
