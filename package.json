@@ -1,0 +1,31 @@
+{
+  "name": "react-field-guide",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.23.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @react-field-guide/course dev",
+    "build": "pnpm -r build && node scripts/assemble-site.mjs",
+    "preview": "node scripts/serve-site.mjs",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint apps scripts eslint.config.js",
+    "format": "prettier --write apps scripts \"*.{js,json}\" pnpm-workspace.yaml",
+    "format:check": "prettier --check apps scripts \"*.{js,json}\" pnpm-workspace.yaml",
+    "test": "pnpm -r test",
+    "e2e": "pnpm --filter @react-field-guide/course e2e",
+    "docs": "echo no docs to generate yet",
+    "docs:check": "echo no docs to check yet"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.15.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.73.0"
+  }
+}
