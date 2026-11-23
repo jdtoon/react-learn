@@ -14,5 +14,14 @@ window.matchMedia = vi.fn((query: string) => ({
 })) as unknown as typeof window.matchMedia;
 
 window.scrollTo = vi.fn() as unknown as typeof window.scrollTo;
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
+class ResizeObserverStub {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+
+window.ResizeObserver = ResizeObserverStub as unknown as typeof ResizeObserver;
 
 afterEach(cleanup);

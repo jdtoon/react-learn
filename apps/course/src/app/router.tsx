@@ -10,8 +10,8 @@ function lazyPage<K extends string>(load: () => Promise<Record<K, ComponentType>
 const HomePage = lazyPage(() => import('../pages/HomePage'), 'HomePage');
 const ModuleRoute = lazyPage(() => import('../pages/ModuleRoute'), 'ModuleRoute');
 const NotFoundPage = lazyPage(() => import('../pages/NotFoundPage'), 'NotFoundPage');
-const MeetingPage = lazyPage(() => import('../pages/StubPage'), 'MeetingPage');
-const GlossaryPage = lazyPage(() => import('../pages/StubPage'), 'GlossaryPage');
+const MeetingPage = lazyPage(() => import('../pages/MeetingPage'), 'MeetingPage');
+const GlossaryPage = lazyPage(() => import('../pages/GlossaryPage'), 'GlossaryPage');
 const KitPage = lazyPage(() => import('../pages/StubPage'), 'KitPage');
 
 export const routes: RouteObject[] = [

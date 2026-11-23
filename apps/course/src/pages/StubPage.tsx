@@ -15,26 +15,6 @@ function StubPage({ eyebrow, title, description }: StubPageProps) {
   );
 }
 
-export function MeetingPage() {
-  return (
-    <StubPage
-      eyebrow="Ten minutes before the meeting"
-      title="Meeting mode"
-      description="Every module's talk track, questions to ask and red flags on one scannable page. It fills in as modules are built."
-    />
-  );
-}
-
-export function GlossaryPage() {
-  return (
-    <StubPage
-      eyebrow="Reference"
-      title="Glossary"
-      description="Every key term with a one-line definition, linked to the module that teaches it. It fills in as modules are built."
-    />
-  );
-}
-
 export function KitPage() {
   return (
     <StubPage

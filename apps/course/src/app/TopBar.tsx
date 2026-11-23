@@ -1,6 +1,7 @@
-import { ClipboardList, Menu, Search } from 'lucide-react';
+import { ClipboardList, Menu } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 import { Link } from 'react-router';
+import { CommandPalette } from './CommandPalette';
 import { ThemeToggle } from './ThemeToggle';
 
 const markBars = [
@@ -50,17 +51,7 @@ export function TopBar() {
           <span className="truncate">React Field Guide</span>
         </Link>
         <div className="ml-auto flex items-center gap-1 sm:gap-2">
-          <button
-            type="button"
-            aria-keyshortcuts="Control+K Meta+K"
-            className="flex h-8 items-center gap-2 rounded-lg border border-line bg-surface px-2 text-sm text-muted hover:border-accent hover:text-fg sm:h-9 sm:px-2.5 md:w-56"
-          >
-            <Search aria-hidden="true" size={16} className="shrink-0" />
-            <span className="sr-only md:not-sr-only md:flex-1 md:text-left">Search</span>
-            <kbd className="hidden rounded border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-[0.68rem] text-muted md:inline">
-              Ctrl K
-            </kbd>
-          </button>
+          <CommandPalette />
           <Link
             to="/meeting"
             className="flex h-8 items-center gap-2 rounded-lg border border-line bg-surface px-2 text-sm text-fg hover:border-accent sm:h-9 sm:px-2.5"

@@ -36,11 +36,16 @@ describe('routes', () => {
   });
 
   it.each([
-    ['/meeting', 'Meeting mode'],
-    ['/glossary', 'Glossary'],
-    ['/kit', 'Lab kit'],
-  ])('renders the %s stub', async (path, title) => {
+    ['/meeting', 'Meeting mode', 'No meeting cards yet'],
+    ['/glossary', 'Glossary', 'No terms yet'],
+  ])('renders %s with its empty state while no module is built', async (path, title, empty) => {
     renderAt(path);
     expect(await screen.findByRole('heading', { level: 1, name: title })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: empty })).toBeInTheDocument();
+  });
+
+  it('renders the lab kit stub', async () => {
+    renderAt('/kit');
+    expect(await screen.findByRole('heading', { level: 1, name: 'Lab kit' })).toBeInTheDocument();
   });
 });
