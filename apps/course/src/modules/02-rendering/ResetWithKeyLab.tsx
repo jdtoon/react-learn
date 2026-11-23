@@ -1,5 +1,5 @@
 import { TriangleAlert } from 'lucide-react';
-import { memo, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 import { CodePeek, RenderBox } from '../../kit';
 
 interface User {
@@ -95,7 +95,7 @@ function Profile({ user }: { user: User }) {
   );
 }
 
-export const ResetWithKeyLab = memo(function ResetWithKeyLab() {
+export function ResetWithKeyLab() {
   const [state, dispatch] = useReducer(reduce, { userId: 'ada', mode: 'keep', message: intro });
   const user = users.find((candidate) => candidate.id === state.userId) ?? users[0];
   if (!user) return null;
@@ -150,4 +150,4 @@ export const ResetWithKeyLab = memo(function ResetWithKeyLab() {
       />
     </div>
   );
-});
+}

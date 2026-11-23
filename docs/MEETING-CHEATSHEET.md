@@ -13,7 +13,7 @@ What to say, what to ask and what to watch for, one card per module. The live ve
 **Say**
 
 - A render is React calling the function again. A commit is the DOM change. Most renders commit little or nothing, so a render count alone says little about cost.
-- Changed props do not trigger a re-render. The parent rendering does, and everything underneath runs again unless it is memoised and its props are shallowly equal.
+- Re-renders come from state, a parent rendering or context. A changed prop is a symptom of the parent rendering. Everything underneath runs again unless it is memoised or is `children` passed through.
 - A key is identity. Index keys are fine on a list that never changes. Where items insert, reorder or delete, they attach state to the wrong item.
 - To reset a component, change its key. That beats an effect that copies props into state.
 

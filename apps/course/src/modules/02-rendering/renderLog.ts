@@ -1,7 +1,7 @@
 export interface UpdateSummary {
   id: number;
   trigger: string;
-  ran: string[];
+  rendered: string[];
   domChanges: number;
 }
 
@@ -67,7 +67,7 @@ export function createRenderLog(): RenderLog {
   function publish() {
     if (!current) return;
     collecting = false;
-    snapshot = { ...current, ran: [...current.ran] };
+    snapshot = { ...current, rendered: [...current.rendered] };
     for (const listener of listeners) listener();
   }
 
@@ -86,13 +86,13 @@ export function createRenderLog(): RenderLog {
     getSnapshot: () => snapshot,
     trigger(label) {
       nextId += 1;
-      current = { id: nextId, trigger: label, ran: [], domChanges: 0 };
+      current = { id: nextId, trigger: label, rendered: [], domChanges: 0 };
       collecting = true;
       publishSoon(settleMs);
     },
     rendered(name) {
-      if (!current || !collecting || current.ran.includes(name)) return;
-      current.ran.push(name);
+      if (!current || !collecting || current.rendered.includes(name)) return;
+      current.rendered.push(name);
       publishSoon(0);
     },
     observe(target) {

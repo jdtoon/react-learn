@@ -164,6 +164,23 @@ describe('ModulePage labs', () => {
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
   });
 
+  it('leaves a lab alone when the page re-renders with unchanged content', async () => {
+    const content = validContent(slug);
+    const loadLabs = async () => ({ labs: { demo: DemoLab } });
+    const { rerender } = await renderPage(content, loadLabs);
+    const rendersOfDemoBox = () =>
+      screen.getByRole('group', { name: 'Demo box' }).querySelector('.rb-count')?.textContent;
+    expect(rendersOfDemoBox()).toBe('renders 1');
+    await act(async () => {
+      rerender(
+        <MemoryRouter>
+          <ModulePage content={content} loadLabs={loadLabs} />
+        </MemoryRouter>,
+      );
+    });
+    expect(rendersOfDemoBox()).toBe('renders 1');
+  });
+
   it('reveals what just happened inside a lab frame', async () => {
     const user = userEvent.setup();
     await renderPage(validContent(slug));

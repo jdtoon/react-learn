@@ -123,7 +123,11 @@ describe('createRenderLog', () => {
     expect(log.getSnapshot()).toBeNull();
     vi.advanceTimersByTime(200);
     expect(listener).toHaveBeenCalledTimes(1);
-    expect(log.getSnapshot()).toMatchObject({ trigger: 'Set same value', ran: [], domChanges: 0 });
+    expect(log.getSnapshot()).toMatchObject({
+      trigger: 'Set same value',
+      rendered: [],
+      domChanges: 0,
+    });
   });
 
   it('groups the components that render after a trigger into one update', () => {
@@ -134,7 +138,7 @@ describe('createRenderLog', () => {
     log.rendered('Post A');
     log.rendered('Feed');
     vi.advanceTimersByTime(10);
-    expect(log.getSnapshot()?.ran).toEqual(['Feed', 'Post A']);
+    expect(log.getSnapshot()?.rendered).toEqual(['Feed', 'Post A']);
   });
 
   it('ignores renders that arrive before any trigger and after an update settled', () => {
@@ -146,7 +150,25 @@ describe('createRenderLog', () => {
     vi.advanceTimersByTime(10);
     log.rendered('Feed');
     vi.advanceTimersByTime(10);
-    expect(log.getSnapshot()?.ran).toEqual(['App']);
+    expect(log.getSnapshot()?.rendered).toEqual(['App']);
+  });
+
+  it('stops counting DOM changes once the update has been published', async () => {
+    vi.useFakeTimers();
+    const log = createRenderLog();
+    const target = document.createElement('div');
+    document.body.append(target);
+    const stop = log.observe(target);
+    log.trigger('Change App state');
+    log.rendered('App');
+    target.append(document.createElement('span'));
+    await vi.advanceTimersByTimeAsync(10);
+    expect(log.getSnapshot()?.domChanges).toBe(1);
+    target.append(document.createElement('span'));
+    await vi.advanceTimersByTimeAsync(200);
+    expect(log.getSnapshot()?.domChanges).toBe(1);
+    stop();
+    target.remove();
   });
 
   it('stops notifying a listener that unsubscribed', () => {

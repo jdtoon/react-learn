@@ -1,5 +1,5 @@
 import { Check, TriangleAlert } from 'lucide-react';
-import { memo, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 import { RenderBox, createRng } from '../../kit';
 import { cn } from '../../kit/cn';
 
@@ -187,7 +187,7 @@ function Row({ person, keyLabel }: { person: Person; keyLabel: string }) {
   );
 }
 
-export const KeyChaosLab = memo(function KeyChaosLab() {
+export function KeyChaosLab() {
   const [state, dispatch] = useReducer(reduce, undefined, () => initialState('index'));
   const insertable = canInsert(state);
   const removable = state.items.length > 1;
@@ -258,4 +258,4 @@ export const KeyChaosLab = memo(function KeyChaosLab() {
       </p>
     </div>
   );
-});
+}

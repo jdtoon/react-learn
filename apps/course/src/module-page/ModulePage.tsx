@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, Check, ExternalLink } from 'lucide-react';
-import { Suspense, use, useId, type ReactNode } from 'react';
+import { Suspense, memo, use, useId, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useProgress } from '../app/progress';
 import { padNumber, trackStyle } from '../app/trackStyle';
@@ -108,7 +108,13 @@ function ModuleHeader({ content }: { content: ModuleContent }) {
   );
 }
 
-function LabList({ content, loadLabs }: { content: ModuleContent; loadLabs: LoadLabs }) {
+const LabList = memo(function LabList({
+  content,
+  loadLabs,
+}: {
+  content: ModuleContent;
+  loadLabs: LoadLabs;
+}) {
   const { labs } = use(requestLabs(loadLabs));
 
   return (
@@ -136,7 +142,7 @@ function LabList({ content, loadLabs }: { content: ModuleContent; loadLabs: Load
       })}
     </div>
   );
-}
+});
 
 function LabsFallback() {
   return (

@@ -46,7 +46,7 @@ describe('validateModuleContent', () => {
   });
 
   it.each(['https:example.com', 'https:/example.com', 'https://'])(
-    'reports a link without https:// followed by a host: %s',
+    'reports the malformed https link "%s"',
     (url) => {
       const base = validContent(slug);
       const problems = problemsFor({

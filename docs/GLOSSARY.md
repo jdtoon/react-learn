@@ -8,7 +8,7 @@ Jump to: [B](#b) · [C](#c) · [K](#k) · [M](#m) · [R](#r) · [S](#s) · [T](#
 
 ## B
 
-- **Bail-out**: React skipping work for a component because its state is unchanged by Object.is, so its children are not rendered. See [02. Rendering & reconciliation](modules/02-rendering.md).
+- **Bail-out**: React skipping work for a component and its children because nothing they depend on changed: identical state by Object.is, shallowly equal props under memo, or an element React already has. See [02. Rendering & reconciliation](modules/02-rendering.md).
 
 ## C
 
@@ -33,4 +33,4 @@ Jump to: [B](#b) · [C](#c) · [K](#k) · [M](#m) · [R](#r) · [S](#s) · [T](#
 
 ## T
 
-- **Trigger**: The event that schedules a render: the initial mount or a state update. See [02. Rendering & reconciliation](modules/02-rendering.md).
+- **Trigger**: The event that schedules a render: a first mount or a state update. A component then renders because it mounted, owns the changed state, has a parent that rendered, or reads a context that changed. See [02. Rendering & reconciliation](modules/02-rendering.md).

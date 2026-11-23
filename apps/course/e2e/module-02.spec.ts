@@ -136,7 +136,7 @@ test.describe('Who re-renders?', () => {
     await lab.getByRole('button', { name: 'Set App state to same value' }).click();
     const summary = lab.getByRole('status', { name: 'Last update' });
     await expect(summary).toContainText('Set App state to same value');
-    await expect(summary).toContainText('0 of 7 components ran');
+    await expect(summary).toContainText('0 of 7 components rendered');
     await expect(summary).toContainText('0 DOM changes');
     await expectCounts(lab, [1, 2, 2, 2, 2, 2, 2]);
   });
@@ -146,9 +146,11 @@ test.describe('Who re-renders?', () => {
     const lab = treeLab(page);
     await lab.getByRole('button', { name: 'Change Feed state' }).click();
     const summary = lab.getByRole('status', { name: 'Last update' });
-    await expect(summary).toContainText('4 of 7 components ran');
-    await expect(summary.getByRole('list', { name: 'Ran' })).toContainText('Feed');
-    await expect(summary.getByRole('list', { name: 'Skipped' })).toContainText('App');
+    await expect(summary).toContainText('4 of 7 components rendered');
+    await expect(summary.getByRole('list', { name: 'Rendered', exact: true })).toContainText(
+      'Feed',
+    );
+    await expect(summary.getByRole('list', { name: 'Not rendered' })).toContainText('App');
     await expect(summary).toContainText('1 DOM change');
   });
 
@@ -159,10 +161,9 @@ test.describe('Who re-renders?', () => {
     const lab = treeLab(page);
     await lab.getByRole('button', { name: 'Change App state' }).click();
     const summary = lab.getByRole('status', { name: 'Last update' });
-    await expect(summary).toContainText('6 of 7 components ran');
+    await expect(summary).toContainText('6 of 7 components rendered');
     await expect(summary).toContainText('1 DOM change');
-    await page.waitForTimeout(300);
-    await expect(summary).toContainText('1 DOM change');
+    await expect(summary).not.toContainText('DOM changes');
   });
 
   test('the controls work from the keyboard', async ({ page }) => {

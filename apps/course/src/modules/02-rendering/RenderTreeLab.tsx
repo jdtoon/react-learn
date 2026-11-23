@@ -180,7 +180,7 @@ function App() {
   const [memoOn, setMemoOn] = useState(false);
   const [freshLinks, setFreshLinks] = useState(false);
   useReportRender('App');
-  const links = freshLinks ? ['Inbox', 'Drafts', 'Sent'] : stableLinks;
+  const links = freshLinks ? [...stableLinks] : stableLinks;
 
   return (
     <RenderBox label="<App>">
@@ -262,7 +262,7 @@ function Step({
   );
 }
 
-function ChipList({ label, items, ran }: { label: string; items: string[]; ran: boolean }) {
+function ChipList({ label, items, active }: { label: string; items: string[]; active: boolean }) {
   const labelId = useId();
   return (
     <div className="grid gap-1">
@@ -278,7 +278,7 @@ function ChipList({ label, items, ran }: { label: string; items: string[]; ran: 
               key={item}
               className={cn(
                 'rounded border px-1.5 py-0.5 font-mono text-[0.72rem]',
-                ran
+                active
                   ? 'border-(--tc,var(--accent)) bg-[color-mix(in_oklab,var(--tc,var(--accent))_16%,transparent)]'
                   : 'border-line text-faint',
               )}
@@ -295,8 +295,8 @@ function ChipList({ label, items, ran }: { label: string; items: string[]; ran: 
 function UpdatePanel() {
   const log = useContext(RenderLogContext);
   const summary = useSyncExternalStore(log.subscribe, log.getSnapshot);
-  const ran = summary ? nodeOrder.filter((name) => summary.ran.includes(name)) : [];
-  const skipped = summary ? nodeOrder.filter((name) => !summary.ran.includes(name)) : [];
+  const rendered = summary ? nodeOrder.filter((name) => summary.rendered.includes(name)) : [];
+  const notRendered = summary ? nodeOrder.filter((name) => !summary.rendered.includes(name)) : [];
 
   return (
     <div className="grid gap-2">
@@ -312,12 +312,14 @@ function UpdatePanel() {
           <Step index={2} title="Render">
             {summary ? (
               <>
-                <p className="text-[0.92rem] font-medium">{`${ran.length} of ${nodeOrder.length} components ran`}</p>
-                <ChipList label="Ran" items={ran} ran />
-                <ChipList label="Skipped" items={skipped} ran={false} />
+                <p className="text-[0.92rem] font-medium">{`${rendered.length} of ${nodeOrder.length} components rendered`}</p>
+                <ChipList label="Rendered" items={rendered} active />
+                <ChipList label="Not rendered" items={notRendered} active={false} />
               </>
             ) : (
-              <p className="text-[0.88rem] text-muted">React will list what it called.</p>
+              <p className="text-[0.88rem] text-muted">
+                React will list which components rendered into the commit.
+              </p>
             )}
           </Step>
           <Step index={3} title="Commit" last>
@@ -335,14 +337,16 @@ function UpdatePanel() {
         </ol>
       </div>
       <p className="text-[0.74rem] text-faint">
-        DOM changes are counted by a MutationObserver on the tree above. It ignores the counters and
-        flash styling this lab adds, and writes that leave a value unchanged.
+        A component counts as rendered when its output reaches the commit, so a call React discards
+        after bailing out is not counted. DOM changes are counted by a MutationObserver on the tree
+        above. It ignores the counters and flash styling this lab adds, and writes that leave a
+        value unchanged.
       </p>
     </div>
   );
 }
 
-export const RenderTreeLab = memo(function RenderTreeLab() {
+export function RenderTreeLab() {
   const [log] = useState(createRenderLog);
   const treeRef = useRef<HTMLDivElement>(null);
 
@@ -363,4 +367,4 @@ export const RenderTreeLab = memo(function RenderTreeLab() {
       </div>
     </RenderLogContext>
   );
-});
+}

@@ -22,17 +22,17 @@ A render can call a hundred components and commit one text change. React compare
 
 ### What starts a render
 
-A component renders again for three reasons: it set its own state, its parent rendered, or a context value it reads changed. A prop change is never a trigger on its own. It arrives because the parent rendered.
+A component renders for four reasons: it mounts, it set its own state, its parent rendered, or a context value it reads changed. A changed prop is a symptom of the parent rendering.
 
-Rendering flows down. When a component renders, every component it returns renders too, whether or not its props changed. `memo` adds a check at that boundary: it compares each prop with `Object.is` and skips the render when all are equal. Inline objects, arrays and functions are never equal, so they defeat it. Context changes bypass it.
+Rendering flows down. When a component renders, every child element it creates renders too, whether or not its props changed. Two things stop that. `memo` compares each prop with `Object.is` and skips the render when all are equal. An element React already holds, such as `children` passed through a provider, is reused as is. Inline objects, arrays and functions are never equal, so they defeat `memo`. Context changes bypass both.
 
 Setting state to a value `Object.is` considers identical bails out and the children are skipped. React may still call the component once before it settles.
 
 ### Identity: type, position and key
 
-After a render, React reconciles the new tree against the old one position by position. The same element type keeps the instance and updates its props. A different type discards the subtree, state included, and mounts a new one. In lists, `key` is the identity that lets React match items across inserts and reorders. Without one it falls back to the index.
+After a render, React reconciles the new tree against the old one position by position. The same element type keeps the instance and updates its props. A different type discards the subtree, state included, and mounts a new one. In lists, `key` is the identity that lets React match items across inserts and reorders. Without keys React matches siblings by position and warns in development.
 
-State does not live in your function. React holds it against a position in the tree. The same component at the same position keeps its state when props change, even when they now describe someone else. Change its `key` and it becomes a new instance, which is the clean way to reset state.
+React holds state against a position in the tree, outside your function. The same component at the same position keeps its state when props change, even when they now describe someone else. Change its `key` and it becomes a new instance, which is the clean way to reset state.
 
 ### StrictMode and the Compiler
 
@@ -150,12 +150,14 @@ function NameField({ name, onChange }) {
 
 - **Symptom:** A `memo` wrapper is in place and the profiler still shows the component rendering on every parent render
 - **Cause:** A prop is a new object, array or function each render, so the shallow comparison always fails
-- **Fix:** Hoist the value out of the component or stabilise it, or restructure so the expensive part receives `children` or lives lower in the tree
+- **Fix:** Hoist constant values out of the component, wrap callbacks in `useCallback`, or restructure so the expensive part receives `children` or lives lower in the tree
 
 Bad:
 
 ```tsx
-<Chart options={{ legend: true }} onSelect={(id) => select(id)} />
+function Panel() {
+  return <Chart options={{ legend: true }} onSelect={(id) => setSelected(id)} />;
+}
 ```
 
 Good:
@@ -163,7 +165,10 @@ Good:
 ```tsx
 const options = { legend: true };
 
-<Chart options={options} onSelect={select} />
+function Panel() {
+  const select = useCallback((id) => setSelected(id), []);
+  return <Chart options={options} onSelect={select} />;
+}
 ```
 
 ## In the meeting
@@ -171,7 +176,7 @@ const options = { legend: true };
 **Say**
 
 - A render is React calling the function again. A commit is the DOM change. Most renders commit little or nothing, so a render count alone says little about cost.
-- Changed props do not trigger a re-render. The parent rendering does, and everything underneath runs again unless it is memoised and its props are shallowly equal.
+- Re-renders come from state, a parent rendering or context. A changed prop is a symptom of the parent rendering. Everything underneath runs again unless it is memoised or is `children` passed through.
 - A key is identity. Index keys are fine on a list that never changes. Where items insert, reorder or delete, they attach state to the wrong item.
 - To reset a component, change its key. That beats an effect that copies props into state.
 
@@ -194,12 +199,12 @@ const options = { legend: true };
 
 ## Self-check
 
-1. A parent renders and passes a child exactly the props it had last time. The child is not wrapped in `memo`. Does the child function run?
+1. A parent renders and creates a child element with exactly the props it had last time. The child is not wrapped in `memo`. Does the child function run?
 
    <details>
    <summary>Answer</summary>
 
-   Yes. A parent rendering is the trigger, and props are not compared unless `memo` is there. The DOM only changes if the child returns something different.
+   Yes. The parent rendered, so it created a new element for the child, and React does not compare props without `memo`. The exception is an element React already holds, such as `children` passed through, which it skips. The DOM only changes if the child returns something different.
 
    </details>
 

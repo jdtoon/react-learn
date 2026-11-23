@@ -119,11 +119,11 @@ describe('render-tree lab', () => {
 
     await user.click(screen.getByRole('button', { name: 'Change Feed state' }));
     await within(panel).findByText('Change Feed state');
-    expect(panel).toHaveTextContent(/4 of 7 components ran/);
-    expect(within(panel).getByRole('list', { name: 'Ran' })).toHaveTextContent(
+    expect(panel).toHaveTextContent(/4 of 7 components rendered/);
+    expect(within(panel).getByRole('list', { name: 'Rendered' })).toHaveTextContent(
       'FeedPost APost BThemeBadge',
     );
-    expect(within(panel).getByRole('list', { name: 'Skipped' })).toHaveTextContent(
+    expect(within(panel).getByRole('list', { name: 'Not rendered' })).toHaveTextContent(
       'ThemeProviderAppSidebar',
     );
     expect(panel).toHaveTextContent(/1 DOM change\b/);
@@ -135,7 +135,7 @@ describe('render-tree lab', () => {
     const panel = screen.getByRole('status', { name: 'Last update' });
     await user.click(screen.getByRole('button', { name: 'Change App state' }));
     await within(panel).findByText('Change App state');
-    expect(panel).toHaveTextContent('6 of 7 components ran');
+    expect(panel).toHaveTextContent('6 of 7 components rendered');
     expect(panel).toHaveTextContent(/1 DOM change\b/);
   });
 
@@ -148,13 +148,13 @@ describe('render-tree lab', () => {
     expect(panel).toHaveTextContent(/3 DOM changes/);
   });
 
-  it('reports that nothing ran and nothing changed after a bail-out', async () => {
+  it('reports that nothing rendered and nothing changed after a bail-out', async () => {
     const user = userEvent.setup();
     lab('render-tree');
     const panel = screen.getByRole('status', { name: 'Last update' });
     await user.click(screen.getByRole('button', { name: 'Set App state to same value' }));
     await within(panel).findByText('Set App state to same value');
-    expect(panel).toHaveTextContent('0 of 7 components ran');
+    expect(panel).toHaveTextContent('0 of 7 components rendered');
     expect(panel).toHaveTextContent(/0 DOM changes/);
   });
 });
