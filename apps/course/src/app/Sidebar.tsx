@@ -20,7 +20,8 @@ function moduleState(slug: string, completed: Record<string, true>): ModuleState
   return isBuilt(slug) ? 'todo' : 'planned';
 }
 
-function RailNav({ onNavigate }: { onNavigate?: () => void }) {
+function RailNav({ headingLevel, onNavigate }: { headingLevel: 2 | 3; onNavigate?: () => void }) {
+  const Heading = headingLevel === 2 ? 'h2' : 'h3';
   const idPrefix = useId();
   const completed = useProgress((state) => state.completed);
 
@@ -31,13 +32,15 @@ function RailNav({ onNavigate }: { onNavigate?: () => void }) {
         const headingId = `${idPrefix}-${track.id}`;
         return (
           <div key={track.id} style={trackStyle(track.id)} className="mb-5 last:mb-0">
-            <p
-              id={headingId}
-              className="mb-1.5 flex items-baseline justify-between gap-3 border-b-2 border-(--tc) px-0.5 pb-1.5"
-            >
-              <span className="font-display text-[0.95rem] font-semibold">{track.title}</span>
+            <div className="mb-1.5 flex items-baseline justify-between gap-3 border-b-2 border-(--tc) px-0.5 pb-1.5">
+              <Heading
+                id={headingId}
+                className="font-display text-[0.95rem] leading-[1.55] font-semibold tracking-normal"
+              >
+                {track.title}
+              </Heading>
               <span className="font-mono text-[0.68rem] text-muted">{modules.length} modules</span>
-            </p>
+            </div>
             <ul aria-labelledby={headingId} className="grid gap-px">
               {modules.map((module) => {
                 const state = moduleState(module.slug, completed);
@@ -83,7 +86,7 @@ export function Sidebar() {
   return (
     <>
       <aside className="scroll-thin sticky top-[var(--topbar-h)] hidden h-[calc(100dvh-var(--topbar-h))] self-start overflow-y-auto border-r border-line rail:block">
-        <RailNav />
+        <RailNav headingLevel={2} />
       </aside>
       <Dialog.Portal>
         <Dialog.Overlay className="drawer-overlay fixed inset-0 z-40 bg-overlay rail:hidden" />
@@ -107,6 +110,7 @@ export function Sidebar() {
           </div>
           <div className="scroll-thin min-h-0 flex-1 overflow-y-auto">
             <RailNav
+              headingLevel={3}
               onNavigate={() => {
                 closedByNavigation.current = true;
               }}

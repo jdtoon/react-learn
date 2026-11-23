@@ -1,8 +1,8 @@
-import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { sendFile } from './send-file.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist-site');
 const base = '/react-learn/';
@@ -42,10 +42,8 @@ async function resolveFile(pathname) {
 }
 
 function send(res, file) {
-  res.writeHead(200, {
-    'Content-Type': types[path.extname(file).toLowerCase()] ?? 'application/octet-stream',
-  });
-  createReadStream(file).pipe(res);
+  const contentType = types[path.extname(file).toLowerCase()] ?? 'application/octet-stream';
+  sendFile(res, file, contentType);
 }
 
 await stat(fallback).catch(() => {

@@ -296,3 +296,24 @@ test.describe('at 390px wide', () => {
     expect(scrollWidth).toBeLessThanOrEqual(innerWidth);
   });
 });
+
+test.describe('deep links with a hash', () => {
+  test('opening a section link fresh scrolls the Labs heading into view', async ({ page }) => {
+    await page.goto(`${modulePath}#labs`);
+    const heading = page.getByRole('heading', { level: 2, name: 'Labs', exact: true });
+    await expect(heading).toBeInViewport({ ratio: 1 });
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  });
+
+  test('lands on the section at once when the visitor prefers reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`${modulePath}#labs`);
+    const heading = page.getByRole('heading', { level: 2, name: 'Labs', exact: true });
+    await expect(heading).toBeInViewport({ ratio: 1 });
+  });
+
+  test('a link without a hash stays at the top', async ({ page }) => {
+    await open(page);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  });
+});

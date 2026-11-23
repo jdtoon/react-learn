@@ -11,7 +11,10 @@ function Question({ item, number }: { item: SelfCheckItems[number]; number: numb
   return (
     <li className="grid gap-3 rounded-xl border border-line bg-surface p-4">
       <div className="flex gap-3">
-        <span aria-hidden="true" className="font-mono text-[0.78rem] text-(--tc,var(--accent))">
+        <span
+          aria-hidden="true"
+          className="font-mono text-[0.78rem] text-(--tc-text,var(--accent))"
+        >
           {String(number).padStart(2, '0')}
         </span>
         <p className="text-[0.98rem] leading-snug">

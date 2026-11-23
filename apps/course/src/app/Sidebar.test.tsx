@@ -44,6 +44,18 @@ describe('Sidebar', () => {
     expect(links[0]).toHaveAttribute('href', '/modules/01-how-react-thinks');
   });
 
+  it('labels each track with a heading and names its list after it', () => {
+    const nav = renderSidebar();
+    for (const track of tracks) {
+      const heading = within(nav).getByRole('heading', { level: 2, name: track.title });
+      const modules = curriculum.filter((module) => module.track === track.id);
+      const list = within(nav).getByRole('list', { name: track.title });
+      expect(heading).toBeInTheDocument();
+      expect(within(list).getAllByRole('link')).toHaveLength(modules.length);
+    }
+    expect(within(nav).getAllByRole('heading')).toHaveLength(tracks.length);
+  });
+
   it('marks planned modules and leaves built modules unmarked', () => {
     const nav = renderSidebar();
     expect(within(nav).getByRole('link', { name: /Why & when/ })).toHaveAccessibleName(/planned/);
@@ -74,6 +86,7 @@ describe('Sidebar', () => {
     const drawer = screen.getByRole('dialog', { name: 'Course modules' });
     const nav = within(drawer).getByRole('navigation', { name: 'Course modules' });
     expect(within(nav).getAllByRole('link')).toHaveLength(curriculum.length);
+    expect(within(nav).getAllByRole('heading', { level: 3 })).toHaveLength(tracks.length);
     await userEvent.click(within(nav).getByRole('link', { name: /Why & when/ }));
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });

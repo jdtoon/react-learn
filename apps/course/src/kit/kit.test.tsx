@@ -355,6 +355,19 @@ describe('Stepper', () => {
     expect(screen.getByText('Step 2 of 3')).toBeInTheDocument();
   });
 
+  it('keeps the visible text of every button inside its accessible name', () => {
+    render(<Stepper steps={steps} autoplayMs={1000} />);
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBeGreaterThanOrEqual(5);
+    for (const button of buttons) {
+      const visible = button.textContent?.trim() ?? '';
+      expect(visible).not.toBe('');
+      expect(button).toHaveAccessibleName(
+        expect.stringMatching(new RegExp(`\\b${visible}\\b`, 'i')),
+      );
+    }
+  });
+
   it('steps with the arrow keys while focus is inside', async () => {
     const user = userEvent.setup();
     render(<Stepper steps={steps} />);
