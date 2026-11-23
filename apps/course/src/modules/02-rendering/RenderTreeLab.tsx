@@ -318,7 +318,7 @@ function UpdatePanel() {
               </>
             ) : (
               <p className="text-[0.88rem] text-muted">
-                React will list which components rendered into the commit.
+                This lists which components rendered into the commit.
               </p>
             )}
           </Step>
@@ -337,10 +337,10 @@ function UpdatePanel() {
         </ol>
       </div>
       <p className="text-[0.74rem] text-faint">
-        A component counts as rendered when its output reaches the commit, so a call React discards
-        after bailing out is not counted. DOM changes are counted by a MutationObserver on the tree
-        above. It ignores the counters and flash styling this lab adds, and writes that leave a
-        value unchanged.
+        A component counts as rendered when its output is committed, so a call React discards after
+        bailing out is not counted. DOM changes are counted by a MutationObserver on the tree above.
+        It ignores the counters and flash styling this lab adds, and writes that leave a value
+        unchanged.
       </p>
     </div>
   );

@@ -22,7 +22,7 @@ A render can call a hundred components and commit one text change. React compare
 
 ### What starts a render
 
-A component renders for four reasons: it mounts, it set its own state, its parent rendered, or a context value it reads changed. A changed prop is a symptom of the parent rendering.
+A component renders for five reasons: it mounts, it set its own state, an external store it subscribes to changed, its parent rendered, or a context value it reads changed. A changed prop is a symptom of the parent rendering.
 
 Rendering flows down. When a component renders, every child element it creates renders too, whether or not its props changed. Two things stop that. `memo` compares each prop with `Object.is` and skips the render when all are equal. An element React already holds, such as `children` passed through a provider, is reused as is. Inline objects, arrays and functions are never equal, so they defeat `memo`. Context changes bypass both.
 
@@ -48,7 +48,7 @@ The labs run in the app. Each one below links to the live version.
 
 Try this:
 
-- Press **Change Feed state**. Feed and everything under it renders; `<App>`, `<Sidebar>` and the provider do not
+- Press **Change Feed state**. Feed, `<Post A>`, `<Post B>` and `<ThemeBadge>` render, and every other box keeps its count
 - Press **Change App state**. Tick **Wrap Sidebar in memo** and press **Change App state** again: Sidebar holds its count. Now tick **Pass a fresh array to Sidebar each render** and press **Change App state** once more: Sidebar renders again
 - Press **Change theme**. Only the provider and `<ThemeBadge>` render, although `<ThemeBadge>` sits deep in the tree
 - Press **Set App state to same value** and watch the summary below the tree
@@ -155,19 +155,29 @@ function NameField({ name, onChange }) {
 Bad:
 
 ```tsx
+const Chart = memo(function Chart({ options, onSelect }) {
+  return <button onClick={onSelect}>{options.title}</button>;
+});
+
 function Panel() {
-  return <Chart options={{ legend: true }} onSelect={(id) => setSelected(id)} />;
+  const [, setCount] = useState(0);
+  return <Chart options={{ title: "Sales" }} onSelect={() => setCount((c) => c + 1)} />;
 }
 ```
 
 Good:
 
 ```tsx
-const options = { legend: true };
+const Chart = memo(function Chart({ options, onSelect }) {
+  return <button onClick={onSelect}>{options.title}</button>;
+});
+
+const options = { title: "Sales" };
 
 function Panel() {
-  const select = useCallback((id) => setSelected(id), []);
-  return <Chart options={options} onSelect={select} />;
+  const [, setCount] = useState(0);
+  const onSelect = useCallback(() => setCount((c) => c + 1), []);
+  return <Chart options={options} onSelect={onSelect} />;
 }
 ```
 
