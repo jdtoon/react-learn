@@ -1,6 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { isBuilt, slugsFromPaths } from './builtSlugs';
+import { isBuilt, slugFromModulePath, slugsFromPaths } from './builtSlugs';
 import { builtModules } from './registry';
+
+describe('slugFromModulePath', () => {
+  it('reads the folder name of a module index file', () => {
+    expect(slugFromModulePath('../modules/02-rendering/index.ts')).toBe('02-rendering');
+  });
+
+  it.each(['../modules/02-rendering/lab.ts', '../modules/index.ts', 'index.ts'])(
+    'ignores %s',
+    (path) => {
+      expect(slugFromModulePath(path)).toBeUndefined();
+    },
+  );
+});
 
 describe('slugsFromPaths', () => {
   it('collects module folder names from index files only', () => {

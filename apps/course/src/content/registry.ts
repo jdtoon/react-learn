@@ -1,15 +1,13 @@
-import { isBuilt } from './builtSlugs';
+import { isBuilt, slugFromModulePath } from './builtSlugs';
 import { curriculum } from './curriculum';
 import type { ModuleEntry, ModuleMeta } from './types';
-
-const modulePath = /\/modules\/([^/]+)\/index\.ts$/;
 
 export function indexModulesBySlug(
   files: Record<string, ModuleEntry>,
 ): Record<string, ModuleEntry> {
   const indexed: Record<string, ModuleEntry> = {};
   for (const [path, entry] of Object.entries(files)) {
-    const slug = modulePath.exec(path)?.[1];
+    const slug = slugFromModulePath(path);
     if (slug) indexed[slug] = entry;
   }
   return indexed;

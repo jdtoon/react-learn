@@ -100,3 +100,17 @@ test.describe('at 390px wide', () => {
     await expect(menu).toBeFocused();
   });
 });
+
+test('the left rail exposes a heading for each track', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/react-learn/');
+  const rail = page.getByRole('navigation', { name: 'Course modules' });
+  await expect(rail.getByRole('heading', { level: 2 })).toHaveText([
+    'Foundations',
+    'Architecture',
+    'Performance',
+    'Craft',
+    'Production',
+    'Micro frontends',
+  ]);
+});

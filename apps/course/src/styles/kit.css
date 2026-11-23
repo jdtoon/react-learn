@@ -95,6 +95,7 @@
 
   .rb {
     --rb-accent: var(--tc, var(--accent));
+    --rb-accent-text: var(--tc-text, var(--accent));
     display: grid;
     gap: 0.4rem;
     min-width: 0;
@@ -131,7 +132,7 @@
     padding: 1px 6px;
     border: 1px solid var(--rb-accent);
     border-radius: 4px;
-    color: var(--rb-accent);
+    color: var(--rb-accent-text);
     font-family: var(--font-mono);
     font-size: 0.66rem;
   }

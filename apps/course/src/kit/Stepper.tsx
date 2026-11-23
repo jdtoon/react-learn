@@ -95,7 +95,7 @@ export function Stepper({ steps, autoplayMs }: StepperProps) {
           onClick={() => dispatch({ type: 'go', index: index - 1, last })}
         >
           <ChevronLeft aria-hidden="true" size={16} />
-          Prev
+          Previous
         </button>
         {canPlay && (
           <button
@@ -132,7 +132,7 @@ export function Stepper({ steps, autoplayMs }: StepperProps) {
                 className={cn(
                   'grid size-6 place-items-center rounded-full border font-mono text-[0.68rem] tabular-nums',
                   position === index
-                    ? 'border-(--tc,var(--accent)) bg-(--tc,var(--accent)) text-accent-fg'
+                    ? 'border-(--tc-text,var(--accent)) bg-(--tc-text,var(--accent)) text-accent-fg'
                     : 'border-line bg-surface text-muted hover:border-accent',
                 )}
               >

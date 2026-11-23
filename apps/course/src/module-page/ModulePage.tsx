@@ -7,6 +7,7 @@ import { isBuilt } from '../content/registry';
 import { curriculum, trackById } from '../content/curriculum';
 import type { LabComponents, ModuleContent, ModuleEntry, ModuleMeta } from '../content/types';
 import { LabFrame, MeetingCardView, PitfallCard, RichText, SelfCheck } from '../kit';
+import { useScrollToHash } from '../lib/useScrollToHash';
 import { LabBoundary } from './LabBoundary';
 
 type LoadLabs = ModuleEntry['loadLabs'];
@@ -238,6 +239,7 @@ function Neighbour({
 }
 
 export function ModulePage({ content, loadLabs }: ModulePageProps) {
+  useScrollToHash();
   const position = curriculum.findIndex((module) => module.slug === content.slug);
   const previous = position > 0 ? curriculum[position - 1] : undefined;
   const next = position >= 0 ? curriculum[position + 1] : undefined;

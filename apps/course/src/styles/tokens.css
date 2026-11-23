@@ -18,16 +18,21 @@
   --cyan-700: #0a7891;
   --cyan-400: #3cc1da;
   --blue-600: #2c66d4;
+  --blue-700: #2c65d2;
   --blue-400: #6c9bff;
   --violet-600: #7444d2;
   --violet-400: #a689ff;
   --orange-600: #bd630f;
+  --orange-700: #a3550d;
   --orange-400: #efa04e;
   --pink-600: #c33870;
+  --pink-700: #bb366c;
   --pink-400: #f17aa9;
   --green-600: #2a8753;
+  --green-700: #25784a;
   --green-400: #5dc78b;
   --teal-600: #0a849b;
+  --teal-700: #097488;
   --teal-400: #3cc1da;
   --red-600: #bb2540;
   --red-400: #ff6079;
@@ -59,6 +64,12 @@
   --track-craft: var(--pink-400);
   --track-production: var(--green-400);
   --track-micro-frontends: var(--teal-400);
+  --track-foundations-text: var(--blue-400);
+  --track-architecture-text: var(--violet-400);
+  --track-performance-text: var(--orange-400);
+  --track-craft-text: var(--pink-400);
+  --track-production-text: var(--green-400);
+  --track-micro-frontends-text: var(--teal-400);
 }
 
 :root[data-theme='light'] {
@@ -84,6 +95,12 @@
   --track-craft: var(--pink-600);
   --track-production: var(--green-600);
   --track-micro-frontends: var(--teal-600);
+  --track-foundations-text: var(--blue-700);
+  --track-architecture-text: var(--violet-600);
+  --track-performance-text: var(--orange-700);
+  --track-craft-text: var(--pink-700);
+  --track-production-text: var(--green-700);
+  --track-micro-frontends-text: var(--teal-700);
 }
 
 @media (prefers-color-scheme: light) {
@@ -110,6 +127,12 @@
     --track-craft: var(--pink-600);
     --track-production: var(--green-600);
     --track-micro-frontends: var(--teal-600);
+    --track-foundations-text: var(--blue-700);
+    --track-architecture-text: var(--violet-600);
+    --track-performance-text: var(--orange-700);
+    --track-craft-text: var(--pink-700);
+    --track-production-text: var(--green-700);
+    --track-micro-frontends-text: var(--teal-700);
   }
 }
 

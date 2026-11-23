@@ -1,10 +1,11 @@
 import { ClipboardList } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router';
+import { useState } from 'react';
+import { Link } from 'react-router';
 import { padNumber, trackStyle } from '../app/trackStyle';
 import { listBuiltContent } from '../content/builtContent';
 import { tracks } from '../content/curriculum';
 import type { ModuleContent, TrackId } from '../content/types';
+import { useScrollToHash } from '../lib/useScrollToHash';
 import {
   MeetingCardView,
   MeetingPartLabel,
@@ -106,13 +107,9 @@ function FilterChip({
 
 export function MeetingPage() {
   const [filter, setFilter] = useState<Filter>('all');
-  const { hash } = useLocation();
   const built = listBuiltContent();
 
-  useEffect(() => {
-    if (!hash) return;
-    document.getElementById(hash.slice(1))?.scrollIntoView();
-  }, [hash]);
+  useScrollToHash();
 
   const groups = tracks
     .map((track) => ({ track, modules: built.filter((content) => content.track === track.id) }))

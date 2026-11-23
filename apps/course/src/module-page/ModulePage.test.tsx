@@ -22,11 +22,12 @@ function ThrowingLab(): ReactNode {
 async function renderPage(
   content: ModuleContent,
   loadLabs: () => Promise<{ labs: LabComponents }> = async () => ({ labs: { demo: DemoLab } }),
+  path = '/',
 ) {
   let result: ReturnType<typeof render> | undefined;
   await act(async () => {
     result = render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={[path]}>
         <ModulePage content={content} loadLabs={loadLabs} />
       </MemoryRouter>,
     );
@@ -54,6 +55,23 @@ describe('ModulePage header', () => {
     const outcomes = screen.getByRole('list', { name: 'After this you can' });
     expect(within(outcomes).getAllByRole('listitem')).toHaveLength(2);
     expect(screen.getByRole('heading', { name: 'Demo lab' })).toBeInTheDocument();
+  });
+});
+
+describe('ModulePage deep links', () => {
+  it('scrolls to the section named by the hash after the first render', async () => {
+    const scroll = vi.mocked(window.HTMLElement.prototype.scrollIntoView);
+    scroll.mockClear();
+    await renderPage(validContent(slug), undefined, `/modules/${slug}#labs`);
+    expect(scroll).toHaveBeenCalledTimes(1);
+    expect(scroll.mock.contexts[0]).toBe(document.getElementById('labs'));
+  });
+
+  it('leaves the scroll position alone without a hash', async () => {
+    const scroll = vi.mocked(window.HTMLElement.prototype.scrollIntoView);
+    scroll.mockClear();
+    await renderPage(validContent(slug));
+    expect(scroll).not.toHaveBeenCalled();
   });
 });
 
